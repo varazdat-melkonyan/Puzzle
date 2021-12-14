@@ -3,11 +3,17 @@ const timeout = (ms) => {
 }
 
 let data;
+let dupValues = [];
+let datSign = [];
+let values = [];
+let keepValue = false;
+let scrolling = false;
+let done = false;
+let originalData = [];
+let href = window.location.href;
 let index = 1;
-let left = [];
-let center = [];
-let right = [];
-let currentItem = [];
+let currentWord = [];
+let signShuff = ["<", ">", "="];
 
 jQuery.event.special.wheel = {
     setup: function( _, ns, handle ) {
@@ -19,26 +25,32 @@ const onPageLoad = async () => {
     data = await $.get('data/data.json');
     data = data.elements;
 
-    for(let i = 0; i < data.length; i++) {
-        left.push(data[i].first);
-        center.push(data[i].second);
-        right.push(data[i].three);
+    for(let i = 0; i < data.length - 1; i++) {
+            dupValues.push(data[i].value);
+            datSign.push(data[i].sign);
     }
-    currentItem.push(left[0], center[0], right[0]);
-    shuffle(currentItem);
-    view.addPuzzle(currentItem[0], currentItem[1], currentItem[2]);
 
-    // $(".left" ).on('wheel', async function (e) { wheel(e), 0});
-    // $(".center" ).on('wheel', async function (e) { wheel(e), 1});
-    // $(".right" ).on('wheel', async function (e) { wheel(e), 2});
+    for (let i = 0; i < dupValues.length; i++) dupValues[i] = {value: dupValues[i]};
+
+    for (let i =  0; i < data.length; i++) {
+        values.push({value: data[i].value});
+    }
+
+    let rand = Math.floor(Math.random() * dupValues.length);
+    currentWord.push(rand,rand);
+
+    signShuff = shuffle(signShuff);
+
+    originalData = JSON.parse(JSON.stringify(data));
+
+    addWords(".left", currentWord[0], 0);
+    addWords(".right", currentWord[1], 1);
+    $(".signs").append(`<div id="sign_0" class="topSign sign"><p>${signShuff[0]}</p></div>`);
+    $(".signs").append(`<div id="sign_1" class="currentSign sign"><p>${signShuff[1]}</p></div>`);
+    $(".signs").append(`<div id="sign_2" class="bottomSign sign"><p>${signShuff[2]}</p></div>`);
+
+    $(".signs" ).on('wheel', async function (e) { wheel(e) });
     loader.toggle();
-}
-
-function check() {
-    let current = [data[index].first, data[index].second, data[index].three]
-    shuffle(current);
-    view.editPuzzle(index, current[0], current[1], current[2])
-    index++;
 }
 
 const shuffle = (array) => {
@@ -72,6 +84,86 @@ const wheel = async (e) => {
             }, 700);
         }
     }
+}
+
+const addWords = async (parent, index, type) => {
+    if (keepValue && type == 1) {
+        if (dupValues.length < 3) {
+            await view.addPair(getWord(index, type), getWord(index - 1, type), getWord(index + 1, type), parent, type);
+        } else {
+            await view.addPair(getWord(index, type), getWord(index - 1, type), getWord(index + 1, type), parent, type);
+        }
+    } else {
+        await view.addPair(getWord(index, type), getWord(index - 1, type), getWord(index + 1, type), parent, type);
+    }
+}
+
+const scrollToWord = async (index, dir, parent, type, reset, generate) => {
+    await view.updatePair(getWord(index, type), getWord(index - 1, type), getWord(index + 1, type), dir, parent, type, reset, generate);
+}
+
+const check = async () => {
+    view.flashCircle();
+    scrolling = true;
+    $("#check").attr("onclick", "");
+
+    if (getWord(currentWord[0], 0).value == getWord(currentWord[1], 1).value && getWord(currentWord[0], 0).sign == $(`#sign_${index}`).text()) {
+        view.toggleFlash("green");
+
+        data.splice(data.indexOf(getWord(currentWord[0])), 1);
+        values.splice(values.indexOf(getWord(currentWord[1], 1)), 1);
+        view.deletePair();
+        $(".sign").css("opacity", "0");
+        await timeout(1000);
+        for (let i = 0; i < currentWord.length; i++) {
+            if (!keepValue || (keepValue && i == 0))
+                currentWord[i]--;
+            
+            let obj = i == 0 ? ".left" : ".right";
+
+            let length = keepValue && i == 1 ? dupValues.length : data.length;
+
+            if (data.length == 2) {
+                view.secondLastScroll(obj);
+            }
+            else if (length >= 3) {
+                scrollToWord(currentWord[i], -1, obj, i, true, true);
+            }
+            else if (length == 1) {
+                view.lastScroll();
+            } else if (data.length < 1) {
+                done = true;
+                view.end();
+                $("#check").css("display", "none");
+                break;
+            }
+        }
+    }
+    else {
+        view.toggleFlash("red");
+        await view.shake();
+    }
+    
+    await timeout(900);
+    scrolling = false;
+    $("#check").attr("onclick", "check()");
+}
+
+const getWord = (newIndex, type) => {
+    let length  = (type == 1 && keepValue) ? dupValues.length : data.length;
+    if (type == 1 && !keepValue) length = values.length;
+    newIndex %= length;
+    
+    if (newIndex < 0) {
+        newIndex = length + newIndex;
+    }
+    else if (newIndex > length) {
+        newIndex = 0;
+    }
+
+    if (type == 1 && !keepValue)
+        return values[newIndex];
+    return (type == 1 && keepValue) ? dupValues[newIndex] : data[newIndex];
 }
 
 $(onPageLoad);
