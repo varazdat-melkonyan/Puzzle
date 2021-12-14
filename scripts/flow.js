@@ -1,129 +1,88 @@
-let set = { index: 0, readMore: ""};
-
 const timeout = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function onLoad() {
-    let path = parser.getParams();
-    await $.get(path, function (json) { 
-          set.data = json.data;
-          set.readMore = json.readmore;
-    });
+let data;
+let index = 1;
+let left = [];
+let center = [];
+let right = [];
+let currentItem = [];
+let secondItem = [];
+let currentIndex = 0;
 
-    view.createCard(-1, "", "left","", set.readMore);
-    view.createCard(0, set.data[0].text, "center",set.data[0].title, set.readMore);
-    view.createCard(1, set.data[1].text, "right",set.data[1].title, set.readMore);
-    
+jQuery.event.special.wheel = {
+    setup: function( _, ns, handle ) {
+        this.addEventListener("wheel", handle, { passive: !ns.includes("noPreventDefault") });
+    }
+};
+
+const onPageLoad = async () => {
+    data = await $.get('data/data.json');
+    data = data.elements;
+
+    for(let i = 0; i < data.length; i++) {
+        left.push(data[i].first);
+        center.push(data[i].second);
+        right.push(data[i].three);
+    }
+    currentItem.push(left[0], center[0], right[0]);
+    secondItem.push(data[1].first, data[1].second, data[1].three);
+    shuffle(secondItem);
+    shuffle(currentItem);
+    view.addPuzzle(currentItem[0], currentItem[1], currentItem[2], secondItem[0], secondItem[1], secondItem[2]);
+
+    // $(".left" ).on('wheel', async function (e) { wheel(e), 0});
+    // $(".center" ).on('wheel', async function (e) { wheel(e), 1});
+    // $(".right" ).on('wheel', async function (e) { wheel(e), 2});
     loader.toggle();
 }
 
-const scrollCards = (direction) => {
-    let newIndex = set.index + direction;
-
-    if (newIndex < 0 || newIndex >= set.data.length) {
-        return;
-    }
-    else {
-        $(`.scrollBtn`).css("pointer-events", "none").prop("disabled", true);
-        
-        set.index += direction;
-        view.scrollCards(direction);
-
-        setTimeout(() => {
-            $(`.scrollBtn`).css("pointer-events", "auto").removeAttr("disabled");
-        }, 500);
+function check() {
+    view.flashCircle();
+    $("#check").attr("onclick", "");
+    if ($(".current .left p").text() == data[currentIndex].first && $(".current .center p").text() == data[currentIndex].second && $(".current .right p").text() == data[currentIndex].three) {        
+        view.toggleFlash("green");
+        currentItem = [data[index].first, data[index].second, data[index].three]
+        shuffle(currentItem);
+        view.editPuzzle(currentItem[0], currentItem[1], currentItem[2])
+        index++;
+        currentIndex++;
+        view.deletePuzzle();
     }
 }
 
-function readMore() {
-    if(set.data[set.index].text.length > 650 && set.data[set.index].title.length < 1) {
-        $(`#${set.index} .text`).css("top", "auto");
-        $(`#${set.index} .text`).css("height", "auto");
-        $(`#${set.index} .text`).css("overflow", "auto");
-        $(`#${set.index} .text`).html(set.data[set.index].text);
-        $(`#${set.index} .readMore`).css("display", "none");
-    }
-    else {
-        if ($(`#${set.index} .title`).css("height") == "98px") {
-            $(`#${set.index} .text`).css("top", "130px");
-        }
-        else if ($(`#${set.index} .title`).css("height") == "49px" && set.data[set.index].text.length < 650) {
-            $(`#${set.index} .text`).css("top", "auto");
-        }
-        $(`#${set.index} .text`).css("max-height", "300px");
-        $(`#${set.index} .text`).css("height", "auto");
-        $(`#${set.index} .text`).css("overflow", "auto");
-        $(`#${set.index} .text`).html(set.data[set.index].text);
-        $(`#${set.index} .readMore`).css("display", "none");
-    }
+const shuffle = (array) => {
+	let currentIndex = array.length, tempVal, randomIndex;
+
+	while (0 !== currentIndex)
+	{
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+
+		tempVal = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = tempVal;
+	}
+
+	return array;
 }
 
-const reset = (index) => {
-    view.reset();
-}
+const wheel = async (e) => {
+    if (!scrolling && !done) {
+        let dir = Math.sign(e.originalEvent.wheelDelta);
+        let newIndex = index - dir;
 
-$(onLoad);
-
-let drag = { mouseDownPos: 0, start: 0, end: 0, ended: false };
-let area = { x: 0 };
-let inMotion = false;
-let coolDown = false;
-
-$("body").mousedown(function (e) {
-    if (!drag.ended && coolDown == false) {
-        drag.mouseDownPos = e.pageX;
-        drag.start = e.pageX;
-        drag.ended = true;
-    }
-})
-
-$("body").mousemove(function (e) {
-    if (drag.ended) {        
-        area.x = e.pageX - drag.start;
-        $(`.card`).css("transition", `none`);
-
-        $(".card").each(function(i) {
-            let margin = parseFloat($(this).css("margin-left"));
-            $(this).css("margin-left", margin + area.x);
-        });
-
-        drag.start = e.pageX;
-        $(`.card`).css("transition", `0.5s`);
-    }
-
-    if (e.pageX <= 30 || e.pageX >= window.innerWidth - 30) {
-        mouseup(e);
-    }
-    if(($(`#-1`).css("margin-left") < "-1800px" || $(`#${set.data.length}`).css("margin-left") < "1800")) {
-        mouseup(e);
-    }
-})
-
-$("body").mouseup(function (e) {
-    mouseup(e);
-})
-
-const mouseup = (e) => {
-    if (drag.ended) {
-        drag.end = e.pageX;
-        drag.ended = false;
-
-        let difference = drag.end - drag.mouseDownPos;
-        if (Math.abs(difference) >= 150) {
-            let direction  = -Math.sign(difference);
-            let newIndex = set.index + direction;
-
-            if (newIndex < 0 || newIndex >= set.data.length) {
-                reset();
-                return;
-            }
-            
-            coolDown = true;
-            scrollCards(direction);
-            setTimeout(() => coolDown = false, 500);
-        } else {
-            reset();
+        if (newIndex >= 0 && newIndex <= 2)
+        {
+            scrolling = true;
+            index -= dir;
+            await view.scrollSign(dir);
+            setTimeout(() => {
+                scrolling = false;
+            }, 700);
         }
     }
 }
+
+$(onPageLoad);
