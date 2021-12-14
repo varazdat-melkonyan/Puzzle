@@ -1,1 +1,2 @@
-# tool_wordspinner
+# Cards
+Cards information tool

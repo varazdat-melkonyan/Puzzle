@@ -1,169 +1,129 @@
+let set = { index: 0, readMore: ""};
+
 const timeout = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-let data;
-let dupValues = [];
-let datSign = [];
-let values = [];
-let keepValue = false;
-let scrolling = false;
-let done = false;
-let originalData = [];
-let href = window.location.href;
-let index = 1;
-let currentWord = [];
-let signShuff = ["<", ">", "="];
+async function onLoad() {
+    let path = parser.getParams();
+    await $.get(path, function (json) { 
+          set.data = json.data;
+          set.readMore = json.readmore;
+    });
 
-jQuery.event.special.wheel = {
-    setup: function( _, ns, handle ) {
-        this.addEventListener("wheel", handle, { passive: !ns.includes("noPreventDefault") });
-    }
-};
-
-const onPageLoad = async () => {
-    data = await $.get('data/data.json');
-    data = data.elements;
-
-    for(let i = 0; i < data.length - 1; i++) {
-            dupValues.push(data[i].value);
-            datSign.push(data[i].sign);
-    }
-
-    for (let i = 0; i < dupValues.length; i++) dupValues[i] = {value: dupValues[i]};
-
-    for (let i =  0; i < data.length; i++) {
-        values.push({value: data[i].value});
-    }
-
-    let rand = Math.floor(Math.random() * dupValues.length);
-    currentWord.push(rand,rand);
-
-    signShuff = shuffle(signShuff);
-
-    originalData = JSON.parse(JSON.stringify(data));
-
-    addWords(".left", currentWord[0], 0);
-    addWords(".right", currentWord[1], 1);
-    $(".signs").append(`<div id="sign_0" class="topSign sign"><p>${signShuff[0]}</p></div>`);
-    $(".signs").append(`<div id="sign_1" class="currentSign sign"><p>${signShuff[1]}</p></div>`);
-    $(".signs").append(`<div id="sign_2" class="bottomSign sign"><p>${signShuff[2]}</p></div>`);
-
-    $(".signs" ).on('wheel', async function (e) { wheel(e) });
+    view.createCard(-1, "", "left","", set.readMore);
+    view.createCard(0, set.data[0].text, "center",set.data[0].title, set.readMore);
+    view.createCard(1, set.data[1].text, "right",set.data[1].title, set.readMore);
+    
     loader.toggle();
 }
 
-const shuffle = (array) => {
-	let currentIndex = array.length, tempVal, randomIndex;
+const scrollCards = (direction) => {
+    let newIndex = set.index + direction;
 
-	while (0 !== currentIndex)
-	{
-		randomIndex = Math.floor(Math.random() * currentIndex);
-		currentIndex -= 1;
-
-		tempVal = array[currentIndex];
-		array[currentIndex] = array[randomIndex];
-		array[randomIndex] = tempVal;
-	}
-
-	return array;
-}
-
-const wheel = async (e) => {
-    if (!scrolling && !done) {
-        let dir = Math.sign(e.originalEvent.wheelDelta);
-        let newIndex = index - dir;
-
-        if (newIndex >= 0 && newIndex <= 2)
-        {
-            scrolling = true;
-            index -= dir;
-            await view.scrollSign(dir);
-            setTimeout(() => {
-                scrolling = false;
-            }, 700);
-        }
-    }
-}
-
-const addWords = async (parent, index, type) => {
-    if (keepValue && type == 1) {
-        if (dupValues.length < 3) {
-            await view.addPair(getWord(index, type), getWord(index - 1, type), getWord(index + 1, type), parent, type);
-        } else {
-            await view.addPair(getWord(index, type), getWord(index - 1, type), getWord(index + 1, type), parent, type);
-        }
-    } else {
-        await view.addPair(getWord(index, type), getWord(index - 1, type), getWord(index + 1, type), parent, type);
-    }
-}
-
-const scrollToWord = async (index, dir, parent, type, reset, generate) => {
-    await view.updatePair(getWord(index, type), getWord(index - 1, type), getWord(index + 1, type), dir, parent, type, reset, generate);
-}
-
-const check = async () => {
-    view.flashCircle();
-    scrolling = true;
-    $("#check").attr("onclick", "");
-
-    if (getWord(currentWord[0], 0).value == getWord(currentWord[1], 1).value && getWord(currentWord[0], 0).sign == $(`#sign_${index}`).text()) {
-        view.toggleFlash("green");
-
-        data.splice(data.indexOf(getWord(currentWord[0])), 1);
-        values.splice(values.indexOf(getWord(currentWord[1], 1)), 1);
-        view.deletePair();
-        $(".sign").css("opacity", "0");
-        await timeout(1000);
-        for (let i = 0; i < currentWord.length; i++) {
-            if (!keepValue || (keepValue && i == 0))
-                currentWord[i]--;
-            
-            let obj = i == 0 ? ".left" : ".right";
-
-            let length = keepValue && i == 1 ? dupValues.length : data.length;
-
-            if (data.length == 2) {
-                view.secondLastScroll(obj);
-            }
-            else if (length >= 3) {
-                scrollToWord(currentWord[i], -1, obj, i, true, true);
-            }
-            else if (length == 1) {
-                view.lastScroll();
-            } else if (data.length < 1) {
-                done = true;
-                view.end();
-                $("#check").css("display", "none");
-                break;
-            }
-        }
+    if (newIndex < 0 || newIndex >= set.data.length) {
+        return;
     }
     else {
-        view.toggleFlash("red");
-        await view.shake();
+        $(`.scrollBtn`).css("pointer-events", "none").prop("disabled", true);
+        
+        set.index += direction;
+        view.scrollCards(direction);
+
+        setTimeout(() => {
+            $(`.scrollBtn`).css("pointer-events", "auto").removeAttr("disabled");
+        }, 500);
     }
-    
-    await timeout(900);
-    scrolling = false;
-    $("#check").attr("onclick", "check()");
 }
 
-const getWord = (newIndex, type) => {
-    let length  = (type == 1 && keepValue) ? dupValues.length : data.length;
-    if (type == 1 && !keepValue) length = values.length;
-    newIndex %= length;
-    
-    if (newIndex < 0) {
-        newIndex = length + newIndex;
+function readMore() {
+    if(set.data[set.index].text.length > 650 && set.data[set.index].title.length < 1) {
+        $(`#${set.index} .text`).css("top", "auto");
+        $(`#${set.index} .text`).css("height", "auto");
+        $(`#${set.index} .text`).css("overflow", "auto");
+        $(`#${set.index} .text`).html(set.data[set.index].text);
+        $(`#${set.index} .readMore`).css("display", "none");
     }
-    else if (newIndex > length) {
-        newIndex = 0;
+    else {
+        if ($(`#${set.index} .title`).css("height") == "98px") {
+            $(`#${set.index} .text`).css("top", "130px");
+        }
+        else if ($(`#${set.index} .title`).css("height") == "49px" && set.data[set.index].text.length < 650) {
+            $(`#${set.index} .text`).css("top", "auto");
+        }
+        $(`#${set.index} .text`).css("max-height", "300px");
+        $(`#${set.index} .text`).css("height", "auto");
+        $(`#${set.index} .text`).css("overflow", "auto");
+        $(`#${set.index} .text`).html(set.data[set.index].text);
+        $(`#${set.index} .readMore`).css("display", "none");
     }
-
-    if (type == 1 && !keepValue)
-        return values[newIndex];
-    return (type == 1 && keepValue) ? dupValues[newIndex] : data[newIndex];
 }
 
-$(onPageLoad);
+const reset = (index) => {
+    view.reset();
+}
+
+$(onLoad);
+
+let drag = { mouseDownPos: 0, start: 0, end: 0, ended: false };
+let area = { x: 0 };
+let inMotion = false;
+let coolDown = false;
+
+$("body").mousedown(function (e) {
+    if (!drag.ended && coolDown == false) {
+        drag.mouseDownPos = e.pageX;
+        drag.start = e.pageX;
+        drag.ended = true;
+    }
+})
+
+$("body").mousemove(function (e) {
+    if (drag.ended) {        
+        area.x = e.pageX - drag.start;
+        $(`.card`).css("transition", `none`);
+
+        $(".card").each(function(i) {
+            let margin = parseFloat($(this).css("margin-left"));
+            $(this).css("margin-left", margin + area.x);
+        });
+
+        drag.start = e.pageX;
+        $(`.card`).css("transition", `0.5s`);
+    }
+
+    if (e.pageX <= 30 || e.pageX >= window.innerWidth - 30) {
+        mouseup(e);
+    }
+    if(($(`#-1`).css("margin-left") < "-1800px" || $(`#${set.data.length}`).css("margin-left") < "1800")) {
+        mouseup(e);
+    }
+})
+
+$("body").mouseup(function (e) {
+    mouseup(e);
+})
+
+const mouseup = (e) => {
+    if (drag.ended) {
+        drag.end = e.pageX;
+        drag.ended = false;
+
+        let difference = drag.end - drag.mouseDownPos;
+        if (Math.abs(difference) >= 150) {
+            let direction  = -Math.sign(difference);
+            let newIndex = set.index + direction;
+
+            if (newIndex < 0 || newIndex >= set.data.length) {
+                reset();
+                return;
+            }
+            
+            coolDown = true;
+            scrollCards(direction);
+            setTimeout(() => coolDown = false, 500);
+        } else {
+            reset();
+        }
+    }
+}

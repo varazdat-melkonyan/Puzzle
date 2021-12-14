@@ -1,12 +1,9 @@
-axios.defaults.baseURL = "https://blackboxbasic.herokuapp.com/";
-
 const parser = {
-    dataFetch: async () =>
-	{
-        let get_url = document.location.href;
-		let url     = new URL(get_url);
-		let _uid    = url.searchParams.get("_uid");
+    getParams: () => {
+        let  url  = new URL(document.location.href);
+        let lan  = url.searchParams.get("lan");
+        let id = url.searchParams.get("id");
 
-        return      axios.get(config.query_url + _uid);
-	}
+        return `data/${lan}/${id}.json`;
+    }
 }
