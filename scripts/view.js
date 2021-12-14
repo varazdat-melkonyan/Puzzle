@@ -102,8 +102,7 @@ const view = {
         $(".circle").css("opacity", 1);
     },
     deletePair: () =>{
-        $(".left .current").addClass("goLeft");
-        if (!keepValue) $(".right .current").addClass("goRight");
+        $(".left .center .right").addClass("goLeft");
     },
     shake: async () => {
         $(".sign").addClass("shake");

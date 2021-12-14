@@ -1,34 +1,34 @@
 {
     "elements": [
         {
-            "text": "1You can get recipes from the chef’s themselves.",
-            "value": "1wf2wafabbaefhaef baethemselvesfa",
-            "sign": "="
+            "first": "1.1",
+            "second": "1.2",
+            "three": "1.3"
         },
         {
-            "text": "2You can get recipes from the chef’s themselves.",
-            "value": "2wf2wafa bbaefhaefbae themselvesfa",
-            "sign": ">"
+            "first": "2.1",
+            "second": "2.2",
+            "three": "2.3"
         },
         {
-            "text": "3You can get recipes from the chef’s themselves.",
-            "value": "3wf2wafa bbaefhaefbaet hemselvesfa",
-            "sign": ">"
+            "first": "3.1",
+            "second": "3.2",
+            "three": "3.3"
         },
         {
-            "text": "4You can get recipes from the chef’s themselves.",
-            "value": "4wf2wafabba efhaefbaethemselvesfa",
-            "sign": "<"
+            "first": "4.1",
+            "second": "4.2",
+            "three": "4.3"
         },
         {
-            "text": "5You can get recipes from the chef’s themselves.",
-            "value": "5wf2wafabba efhaefbae themselvesfa",
-            "sign": "="
+            "first": "5.1",
+            "second": "5.2",
+            "three": "5.3"
         },
         {
-            "text": "6You can get recipes from the chef’s themselves.",
-            "value": "6wf 2wafabba efhaefbaet hemselves sfa",
-            "sign": "=" 
+            "first": "6.1",
+            "second": "6.2",
+            "three": "6.3" 
         }
     ]
 }

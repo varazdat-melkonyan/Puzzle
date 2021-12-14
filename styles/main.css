@@ -168,7 +168,7 @@ body {
     transition: 0.7s;
 }
 
-.signsOverlay {
+.centerOverlay {
     height: 100px;
     width: 100px;
     position: absolute;
@@ -184,7 +184,7 @@ body {
     justify-content: center;
 
 }
-.signs {
+.center {
     height: 100px;
     width: 100px;
     position: absolute;
@@ -224,7 +224,7 @@ body {
     color: #9AB7DB;
 }
 
-.leftOverlay, .rightOverlay, .signsOverlay {
+.leftOverlay, .rightOverlay, .centerOverlay {
     box-shadow: inset -2px -2px 5px 0 #FFFFFF, inset 2px 3px 3px 1px rgba(222,222,230,0.72);
     pointer-events: none;
 }
