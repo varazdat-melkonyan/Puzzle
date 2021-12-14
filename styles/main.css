@@ -139,21 +139,24 @@ body {
 }
 
 .current {
-    top: 190px;
-    left: 10%;
+    transition: 1s;
+    top: 100px;
+    left: 5%;
     position: absolute;
 }
 
 .top {
-    top: -100px;
-    left: 10%;
+    /* opacity: 0; */
+    transition: 1s;
+    top: -150px;
+    left: 5%;
     position: absolute;
 }
 
 .left, .center, .right{
     transition: 1s;
-    height: 195px;
-    width: 210px;
+    height: 150px;
+    width: 150px;
     border-radius: 19px;
     position: absolute;
     overflow: hidden;
@@ -161,19 +164,22 @@ body {
 }
 
 .center {
-    left: 200px;
+    background: yellow;
+    left: 220px;
     font-size: 40px;
     color: #5C7CA6;
 }
 
 .left {
-    left: 45px;
+    background: red;
+    left: 5px;
     font-size: 40px;
     color: #5C7CA6;
 }
 
 .right {
-    left: 545px;
+    background: green;
+    left: 445px;
     font-size: 25px;
     color: #9AB7DB;
 }
