@@ -27,10 +27,9 @@ const onPageLoad = async () => {
         right.push(data[i].three);
     }
     currentItem.push(left[0], center[0], right[0]);
-    secondItem.push(data[1].first, data[1].second, data[1].three);
     shuffle(secondItem);
     shuffle(currentItem);
-    view.addPuzzle(currentItem[0], currentItem[1], currentItem[2], secondItem[0], secondItem[1], secondItem[2]);
+    view.addPuzzle(currentItem[0], currentItem[1], currentItem[2]);
 
     // $(".left" ).on('wheel', async function (e) { wheel(e), 0});
     // $(".center" ).on('wheel', async function (e) { wheel(e), 1});
@@ -44,11 +43,16 @@ function check() {
     if ($(".current .left p").text() == data[currentIndex].first && $(".current .center p").text() == data[currentIndex].second && $(".current .right p").text() == data[currentIndex].three) {        
         view.toggleFlash("green");
         currentItem = [data[index].first, data[index].second, data[index].three]
-        shuffle(currentItem);
+        // shuffle(currentItem);
         view.editPuzzle(currentItem[0], currentItem[1], currentItem[2])
         index++;
         currentIndex++;
         view.deletePuzzle();
+        $(".overlay .top").css("top", "100px");
+    }
+    else {
+        view.toggleFlash("red");
+        view.shake();
     }
 }
 
