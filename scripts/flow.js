@@ -14,6 +14,7 @@ let index = 1;
 let left = [];
 let center = [];
 let right = [];
+let currentItem = [];
 
 jQuery.event.special.wheel = {
     setup: function( _, ns, handle ) {
@@ -30,15 +31,18 @@ const onPageLoad = async () => {
         center.push(data[i].second);
         right.push(data[i].three);
     }
-
-    vview.addPuzzle(".left", 0, left[0], 0);
-    vview.addPuzzle(".center", 1, center[0], 1);
-    vview.addPuzzle(".right", 2, right[0], 2);
+    currentItem.push(left[0], center[0], right[0]);
+    shuffle(currentItem);
+    vview.addPuzzle(currentItem[0], currentItem[1], currentItem[2]);
 
     // $(".left" ).on('wheel', async function (e) { wheel(e), 0});
     // $(".center" ).on('wheel', async function (e) { wheel(e), 1});
     // $(".right" ).on('wheel', async function (e) { wheel(e), 2});
     loader.toggle();
+}
+
+function check() {
+    
 }
 
 const shuffle = (array) => {
