@@ -3,13 +3,6 @@ const timeout = (ms) => {
 }
 
 let data;
-let dupValues = [];
-let values = [];
-let keepValue = false;
-let scrolling = false;
-let done = false;
-let originalData = [];
-let href = window.location.href;
 let index = 1;
 let left = [];
 let center = [];
@@ -43,7 +36,9 @@ const onPageLoad = async () => {
 
 function check() {
     // $(".overlay").attr("id", "green");
-    
+
+    vview.editPuzzle(index, currentItem[0], currentItem[0], currentItem[0])
+    index++;
 }
 
 const shuffle = (array) => {
