@@ -67,11 +67,7 @@
 }
 
 .goLeft {
-    margin-left: -220px !important;
-}
-
-.goRight {
-    margin-left: 320px !important;
+    left: -700px !important;
 }
 
 .closed {
