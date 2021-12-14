@@ -1,16 +1,17 @@
 const view = {
     correct: 0,
     row: `<div class="row"></div>`,
-    addPuzzle: async (firstText, secondText, threeText, secfirstText, secsecondText, secthreeText) => {
+    addPuzzle: async (firstText, secondText, threeText) => {
+        $(".top .left").append(`<p></p>`);
+        $(".top .center").append(`<p></p>`);
+        $(".top .right").append(`<p></p>`);
         $(".current .left").append(`<p>${firstText}</p>`);
         $(".current .center").append(`<p>${secondText}</p>`);
         $(".current .right").append(`<p>${threeText}</p>`);
-        $(".top .left").append(`<p>${secfirstText}</p>`);
-        $(".top .center").append(`<p>${secsecondText}</p>`);
-        $(".top .right").append(`<p>${secthreeText}</p>`);
     },
     editPuzzle: (firstText, secondText, threeText) => {
-        
+        // $(".overlay .top").removeClass("top").addClass("current");
+        // $(".overlay .current").removeClass("current").addClass("top");
         $(".current .left p").text(firstText);
         $(".current .center p").text(secondText);
         $(".current .right p").text(threeText);
@@ -26,12 +27,12 @@ const view = {
 		$(`#${color}`).css("opacity", 0);
 	},
     deletePuzzle: () =>{
-        $(".left .center .right .current").addClass("goLeft");
+        $(".current").addClass("goLeft");
     },
     shake: async () => {
-        $(".sign").addClass("shake");
+        $(".current").addClass("shake");
         await timeout(820);
-        $(".sign").removeClass("shake");
+        $(".current").removeClass("shake");
     },
     end: async () => {
         await timeout(200);
