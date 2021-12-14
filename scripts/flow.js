@@ -11,7 +11,9 @@ let done = false;
 let originalData = [];
 let href = window.location.href;
 let index = 1;
-let currentWord = [];
+let left = [];
+let center = [];
+let right = [];
 
 jQuery.event.special.wheel = {
     setup: function( _, ns, handle ) {
@@ -23,26 +25,19 @@ const onPageLoad = async () => {
     data = await $.get('data/data.json');
     data = data.elements;
 
-    for(let i = 0; i < data.length - 1; i++) {
-            dupValues.push(data[i].value);
-        }
-
-    for (let i = 0; i < dupValues.length; i++) dupValues[i] = {value: dupValues[i]};
-
-    for (let i =  0; i < data.length; i++) {
-        values.push({value: data[i].value});
+    for(let i = 0; i < data.length; i++) {
+        left.push(data[i].first);
+        center.push(data[i].second);
+        right.push(data[i].three);
     }
 
-    let rand = Math.floor(Math.random() * dupValues.length);
-    currentWord.push(rand,rand);
+    vview.addPuzzle(".left", 0, left[0], 0);
+    vview.addPuzzle(".center", 1, center[0], 1);
+    vview.addPuzzle(".right", 2, right[0], 2);
 
-    originalData = JSON.parse(JSON.stringify(data));
-
-    addWords(".left", currentWord[0], 0);
-    addWords(".center",currentWord[1],1);
-    addWords(".right", currentWord[2], 2);
-
-    $(".signs" ).on('wheel', async function (e) { wheel(e) });
+    // $(".left" ).on('wheel', async function (e) { wheel(e), 0});
+    // $(".center" ).on('wheel', async function (e) { wheel(e), 1});
+    // $(".right" ).on('wheel', async function (e) { wheel(e), 2});
     loader.toggle();
 }
 

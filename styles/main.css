@@ -168,38 +168,7 @@ body {
     transition: 0.7s;
 }
 
-.centerOverlay {
-    height: 100px;
-    width: 100px;
-    position: absolute;
-    left: 400px;
-    top: 226px;
-    font-size: 70px;
-    border-radius: 19px;
-    overflow: hidden;
-    scroll-behavior: smooth;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-}
-.center {
-    height: 100px;
-    width: 100px;
-    position: absolute;
-    left: 400px;
-    top: 230px;
-    font-size: 70px;
-    overflow: hidden;
-    scroll-behavior: smooth;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.left, .right, .leftOverlay, .rightOverlay{
+.left, .right, .center{
     transition: 1s;
     height: 195px;
     width: 310px;
@@ -210,39 +179,34 @@ body {
     scroll-behavior: smooth;
 }
 
-.left, .leftOverlay {
-    left: 45px;
+.left {
+    top: 20%;
+    position: absolute;
+    left: 5px;
     font-family: FedraBold;
     font-size: 40px;
     color: #5C7CA6;
 }
 
-.right, .rightOverlay {
-    left: 545px;
+.right {
+    top: 20%;
+    position: absolute;
+    left: 200px;
     font-family: FedraDemi;
     font-size: 25px;
     color: #9AB7DB;
 }
 
-.leftOverlay, .rightOverlay, .centerOverlay {
+.overlay {
+    top: 20%;
+    left: 10%;
+    position: absolute;
+    width: 80%;
+    height: 50%;
     box-shadow: inset -2px -2px 5px 0 #FFFFFF, inset 2px 3px 3px 1px rgba(222,222,230,0.72);
     pointer-events: none;
 }
 
-.left div, .right div {
-    margin-left: 56px;
-    transition: 1s;
-    height: 88px;
-    width: 199px;
-    border-radius: 19px;
-    background-color: #F3F3F3;
-    box-shadow: 5px 5px 5px 0 rgba(222,222,230,0.5), -3px -3px 5px 0 #FEFEFE;
-
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 .row {
     position: relative;
