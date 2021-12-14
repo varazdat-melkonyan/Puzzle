@@ -26,7 +26,7 @@ const onPageLoad = async () => {
     }
     currentItem.push(left[0], center[0], right[0]);
     shuffle(currentItem);
-    vview.addPuzzle(currentItem[0], currentItem[1], currentItem[2]);
+    view.addPuzzle(currentItem[0], currentItem[1], currentItem[2]);
 
     // $(".left" ).on('wheel', async function (e) { wheel(e), 0});
     // $(".center" ).on('wheel', async function (e) { wheel(e), 1});
@@ -35,9 +35,9 @@ const onPageLoad = async () => {
 }
 
 function check() {
-    // $(".overlay").attr("id", "green");
-
-    vview.editPuzzle(index, currentItem[0], currentItem[0], currentItem[0])
+    let current = [data[index].first, data[index].second, data[index].three]
+    shuffle(current);
+    view.editPuzzle(index, current[0], current[1], current[2])
     index++;
 }
 
@@ -66,7 +66,7 @@ const wheel = async (e) => {
         {
             scrolling = true;
             index -= dir;
-            await vview.scrollSign(dir);
+            await view.scrollSign(dir);
             setTimeout(() => {
                 scrolling = false;
             }, 700);
