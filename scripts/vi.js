@@ -7,8 +7,9 @@ const vview = {
             $(".right").append(`<p>${threeText}</p>`);
     },
     editPuzzle: (i, firstText, secondText, threeText) => {
-        $(".left p").text(firstText[i]);
-        $(".center p").text(secondText[i]);
-        $(".right p").text(threeText[i]);
+        console.log(i);
+        $(".left p").text(firstText);
+        $(".center p").text(secondText);
+        $(".right p").text(threeText);
     }
 }
