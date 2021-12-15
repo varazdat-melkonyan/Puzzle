@@ -61,7 +61,7 @@ function check() {
         setTimeout(() => {
             $("#check").attr("onclick", "check()");
             scrolling = false;
-        }, 1000);
+        }, 2000);
     }
 }
 
