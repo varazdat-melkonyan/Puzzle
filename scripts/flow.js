@@ -120,4 +120,6 @@ const mouseup = (e) => {
     }
     
 }
+
+
 $(onPageLoad);
