@@ -10,12 +10,21 @@ const view = {
         $(".current .right").append(`<p>${threeText}</p>`);
     },
     editPuzzle: (firstText, secondText, threeText) => {
-        $(".top").css("opacity", "1");
-        // $(".overlay .top").removeClass("top").addClass("current");
-        // $(".overlay .current").removeClass("current").addClass("top");
-        $(".top .left p").text(firstText);
-        $(".top .center p").text(secondText);
-        $(".top .right p").text(threeText);
+        
+        $(".current").addClass("goLeft").css("opacity", 0);
+        setTimeout(() => { 
+            $(".current").removeClass("goLeft");
+            $("#1").removeClass("current").addClass("top");
+            $(".top").css("opacity", 0);
+            $("#1 .top").css("top", "-150px");
+            $("#0").removeClass("top").addClass("current");
+            $(".current").css("opacity", 1);
+            $(".current").attr("id", "1");
+            $(".top").attr("id", "0");
+        }, 1000);
+        $("#0 .left p").text(firstText);
+        $("#0 .center p").text(secondText);
+        $("#0 .right p").text(threeText);
     },
     flashCircle: async() => {
         $(".circle").css("opacity", 0);
@@ -27,67 +36,9 @@ const view = {
 		await timeout(500);
 		$(`#${color}`).css("opacity", 0);
 	},
-    deletePuzzle: () =>{
-        $(".current").addClass("goLeft");
-    },
     shake: async () => {
         $(".current").addClass("shake");
         await timeout(820);
         $(".current").removeClass("shake");
-    },
-    end: async () => {
-        await timeout(200);
-        let classes = [".left", ".center", ".right"];
-
-        for (let i = 0; i < classes.length; i++) {
-            $(classes[i]).addClass("closed");
-            $(".signs").css("display", "none");
-            $(".signsOverlay").css("display", "none");
-        }
-
-        await timeout(1000);
-        $(".outcome").show();
-        $(".outcome").addClass("showOutcome");
-        $(".outcomeOverlay").addClass("showOutcome");
-        $(".outcomeOverlay").show();
-
-        let rowCount = Math.ceil(originalData.length / 3);
-        let itemCount = 0;
-
-        for (let i = 0; i < rowCount; i++) {
-            $(".outcome").append(view.row);
-            await timeout(20);
-            
-            for (let j = 0; j < 3; j++) {
-                view.createItem($(".row").eq(i), originalData[itemCount].text, originalData[itemCount].value);
-                itemCount++;
-
-                if (itemCount == originalData.length) {
-                    view.fitText(".textHolder", 0, 0);
-                    view.fitText(".valueHolder", 0, 0);
-                    break;
-                }
-            }
-
-            view.fitText(".textHolder", 0, 0);
-            view.fitText(".valueHolder", 0, 0);
-
-            await timeout(200);
-        }
-
-        $(".outcome").css("overflow", "auto");
-    },
-    createItem: async (parent, text, value) => {
-        let item = `<div class="item">
-                        <div class="textHolder">
-                            <p>${text}</p>
-                        </div>
-                        <div class="bar"></div>
-                        <div class="valueHolder">
-                            <p>${value}</p>
-                        </div>
-                    </div>`;
-
-        $(parent).append(item);
-    },
+    }
 }
