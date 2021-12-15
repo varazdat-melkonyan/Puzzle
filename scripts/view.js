@@ -40,5 +40,62 @@ const view = {
         $(".current").addClass("shake");
         await timeout(820);
         $(".current").removeClass("shake");
-    }
+    },
+    end: async () => {
+        await timeout(200);
+        let classes = [".left", ".center", ".right", ".overlay", ".hoverable"];
+
+        for (let i = 0; i < classes.length; i++) {
+            $(classes[i]).addClass("closed");
+        }
+
+        await timeout(1000);
+        $(".outcome").show();
+        $(".outcome").addClass("showOutcome");
+        $(".outcomeOverlay").addClass("showOutcome");
+        $(".outcomeOverlay").show();
+
+        let rowCount = Math.ceil(allData.length / 3);
+        let itemCount = 0;
+
+        for (let i = 0; i < rowCount; i++) {
+            $(".outcome").append(view.row);
+            await timeout(20);
+            
+            for (let j = 0; j < 3; j++) {
+                view.createItem($(".row").eq(i), allData[itemCount].first, allData[itemCount].second, allData[itemCount].three);
+                itemCount++;
+
+                // if (itemCount == originalData.length) {
+                //     view.fitText(".textHolder", 0, 0);
+                //     view.fitText(".valueHolder", 0, 0);
+                //     break;
+                // }
+            }
+
+            // view.fitText(".textHolder", 0, 0);
+            // view.fitText(".valueHolder", 0, 0);
+
+            await timeout(200);
+        }
+
+        $(".outcome").css("overflow", "auto");
+    },
+    createItem: async (parent, leftText, centerText, rightText) => {
+        let item = `<div class="item">
+                        <div class="leftTextHolder">
+                            <p>${leftText}</p>
+                        </div>
+                        <div class="bar"></div>
+                        <div class="centerTextHolder">
+                            <p>${centerText}</p>
+                        </div>
+                        <div class="bar"></div>
+                        <div class="rightTextHolder">
+                            <p>${rightText}</p>
+                        </div>
+                    </div>`;
+
+        $(parent).append(item);
+    },
 }
