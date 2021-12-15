@@ -25,7 +25,6 @@ const onPageLoad = async () => {
         center.push(data[i].second);
         right.push(data[i].three);
     }
-
     for(let j = 0; j < Object.keys(allData[0]).length; j++) {
         view.addPuzzle(j, Object.values(allData[0])[j]);
     }
@@ -45,9 +44,7 @@ function check() {
         $("#check").attr("onclick", "");
         for(let i = 0; i < Object.values(data[0]).length; i++) {
             if ($(`.current .obj_${i} p`).text() == Object.values(data[0])[i]) {       
-                view.toggleFlash("green");
-                // shuffle(currentItem);
-                
+                view.toggleFlash("green");                
                 currentIndex++;
                 index++;
                 data.splice(0, 1);
