@@ -71,7 +71,8 @@
 }
 
 .closed {
-    top: 275px !important;
+    transition: 1s;
+    top: 675px !important;
     height: 0px !important;
 }
 

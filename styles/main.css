@@ -152,34 +152,40 @@ body {
     position: absolute;
 }
 
-.left, .center, .right{
-    transition: 1s;
+.items {
+    margin-left: 20px;
+    display: inline-flex;
+    font-size: 40px;
+    color: #5C7CA6;
+    border-radius: 19px;
     height: 150px;
     width: 150px;
-    border-radius: 19px;
-    position: absolute;
     overflow: hidden;
     scroll-behavior: smooth;
 }
 
-.center {
+.obj_1 {
+    position: absolute;
     background: yellow;
     left: 220px;
     font-size: 40px;
     color: #5C7CA6;
 }
 
-.left {
+.obj_0 {
+    position: absolute;
     background: red;
     left: 5px;
     font-size: 40px;
     color: #5C7CA6;
 }
 
-.right {
+.obj_2 {
+    position: absolute;
+    top: 0;
     background: green;
     left: 445px;
-    font-size: 25px;
+    font-size: 40px;
     color: #9AB7DB;
 }
 

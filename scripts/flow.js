@@ -12,6 +12,7 @@ let center = [];
 let right = [];
 let currentItem = [];
 let secondItem = [];
+let currentIndex = 1;
 
 const onPageLoad = async () => {
     json = await $.get('data/data.json');
@@ -24,10 +25,10 @@ const onPageLoad = async () => {
         center.push(data[i].second);
         right.push(data[i].three);
     }
-    currentItem.push(left[0], center[0], right[0]);
-    // shuffle(secondItem);
-    // shuffle(currentItem);
-    view.addPuzzle(currentItem[0], currentItem[1], currentItem[2]);
+    
+    for(let j = 0; j < Object.keys(allData[0]).length; j++) {
+        view.addPuzzle(j, Object.values(allData[0])[j]);
+    }
 
     loader.toggle();
 }
@@ -42,21 +43,24 @@ function check() {
     }
     else {
         $("#check").attr("onclick", "");
-        let currentIndex = 1;
-        if ($(".current .left p").text() == data[0].first && $(".current .center p").text() == data[0].second && $(".current .right p").text() == data[0].three) {       
-            view.toggleFlash("green");
-            currentItem = [data[currentIndex].first, data[currentIndex].second, data[currentIndex].three]
-            // shuffle(currentItem);
-            view.editPuzzle(currentItem[0], currentItem[1], currentItem[2]);
-            index++;
-            currentIndex++;
-            data.splice(0, 1);
-            
+        for(let i = 0; i < Object.values(data[0]).length; i++) {
+            if ($(`.current .obj_${i} p`).text() == Object.values(data[0])[i]) {       
+                view.toggleFlash("green");
+                // shuffle(currentItem);
+                
+                currentIndex++;
+                index++;
+                data.splice(0, 1);
+                for(let j = 0; j < Object.values(data[0]).length; j++) {
+                    view.editPuzzle(j, Object.values(data[0])[j]);
+                }
+            }
+            else {
+                view.toggleFlash("red");
+                view.shake();
+            }
         }
-        else {
-            view.toggleFlash("red");
-            view.shake();
-        }
+        
         setTimeout(() => {
             $("#check").attr("onclick", "check()");
             scrolling = false;
@@ -93,7 +97,7 @@ $(".overlay").mousedown(function (e) {
     }
 })
 
-$(".overlay").mousemove(function (e, i) {
+const mousemove = (i, e) => {
     if (drag.ended) {        
         area.x = e.pageX - drag.start;
         $(`.${i}`).css("transition", `none`);
@@ -109,10 +113,7 @@ $(".overlay").mousemove(function (e, i) {
     if (e.pageX <= 105 || e.pageX >= window.innerWidth - 815) {
         mouseup(e);
     }
-    // if(($(`#-1`).css("margin-left") < "-1800px" || $(`#${set.data.length}`).css("margin-left") < "1800")) {
-    //     mouseup(e);
-    // }
-})
+}
 
 $(".overlay").mouseup(function (e) {
     mouseup(e);

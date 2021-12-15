@@ -1,15 +1,12 @@
 const view = {
     correct: 0,
     row: `<div class="row"></div>`,
-    addPuzzle: async (firstText, secondText, threeText) => {
-        $(".top .left").append(`<p></p>`);
-        $(".top .center").append(`<p></p>`);
-        $(".top .right").append(`<p></p>`);
-        $(".current .left").append(`<p>${firstText}</p>`);
-        $(".current .center").append(`<p>${secondText}</p>`);
-        $(".current .right").append(`<p>${threeText}</p>`);
+    addPuzzle: async (i, text) => {
+        $(`.top`).append(`<div class="obj_${i} items"><p></p></div>`);
+        $(`.current`).append(`<div class="obj_${i} items"><p>${text}</p></div>`);
+        // $(`.items .obj_${i}`).css("margin-left", "200px")
     },
-    editPuzzle: (firstText, secondText, threeText) => {
+    editPuzzle: (i, text) => {
         
         $(".current").addClass("goLeft").css("opacity", 0);
         setTimeout(() => { 
@@ -22,9 +19,8 @@ const view = {
             $(".current").attr("id", "1");
             $(".top").attr("id", "0");
         }, 1000);
-        $("#0 .left p").text(firstText);
-        $("#0 .center p").text(secondText);
-        $("#0 .right p").text(threeText);
+
+        $(`#0 .obj_${i} p`).text(text);
     },
     flashCircle: async() => {
         $(".circle").css("opacity", 0);
@@ -47,6 +43,7 @@ const view = {
 
         for (let i = 0; i < classes.length; i++) {
             $(classes[i]).addClass("closed");
+            // $(classes[i]).css("display", "none")
         }
 
         await timeout(1000);
