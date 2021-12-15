@@ -97,23 +97,20 @@ $(".overlay").mousedown(function (e) {
     }
 })
 
-const mousemove = (i, e) => {
+$(".overlay").mousemove(function (e) {
     if (drag.ended) {        
         area.x = e.pageX - drag.start;
-        $(`.${i}`).css("transition", `none`);
+        $(`.obj_0`).css("transition", `none`);
 
-        $(`.${i}`).each(function(i) {
+        $(`.obj_0`).each(function() {
             let left = parseFloat($(this).css("left"));
             $(this).css("left", left + area.x);
         });
 
         drag.start = e.pageX;
-        $(`.${i}`).css("transition", `0.5s`);
+        $(`.obj_0`).css("transition", `0.5s`);
     }
-    if (e.pageX <= 105 || e.pageX >= window.innerWidth - 815) {
-        mouseup(e);
-    }
-}
+})
 
 $(".overlay").mouseup(function (e) {
     mouseup(e);
