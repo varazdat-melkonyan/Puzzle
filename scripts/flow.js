@@ -9,7 +9,6 @@ let center = [];
 let right = [];
 let currentItem = [];
 let secondItem = [];
-let currentIndex = 0;
 
 jQuery.event.special.wheel = {
     setup: function( _, ns, handle ) {
@@ -27,33 +26,34 @@ const onPageLoad = async () => {
         right.push(data[i].three);
     }
     currentItem.push(left[0], center[0], right[0]);
-    shuffle(secondItem);
-    shuffle(currentItem);
+    // shuffle(secondItem);
+    // shuffle(currentItem);
     view.addPuzzle(currentItem[0], currentItem[1], currentItem[2]);
 
-    // $(".left" ).on('wheel', async function (e) { wheel(e), 0});
-    // $(".center" ).on('wheel', async function (e) { wheel(e), 1});
-    // $(".right" ).on('wheel', async function (e) { wheel(e), 2});
+    // $(".left" ).on('wheel', async function (e) { wheel(e)});
+    // $(".center" ).on('wheel', async function (e) { wheel(e)});
+    // $(".right" ).on('wheel', async function (e) { wheel(e)});
     loader.toggle();
 }
 
 function check() {
     view.flashCircle();
     $("#check").attr("onclick", "");
-    if ($(".current .left p").text() == data[currentIndex].first && $(".current .center p").text() == data[currentIndex].second && $(".current .right p").text() == data[currentIndex].three) {       
+    let currentIndex = 1;
+    if ($(".current .left p").text() == data[0].first && $(".current .center p").text() == data[0].second && $(".current .right p").text() == data[0].three) {       
         view.toggleFlash("green");
-        currentItem = [data[index].first, data[index].second, data[index].three]
+        currentItem = [data[currentIndex].first, data[currentIndex].second, data[currentIndex].three]
         // shuffle(currentItem);
         view.editPuzzle(currentItem[0], currentItem[1], currentItem[2]);
         index++;
         currentIndex++;
-        view.deletePuzzle();
-        $(".overlay .top").css("top", "100px");
+        data.splice(0, 1);
     }
     else {
         view.toggleFlash("red");
         view.shake();
     }
+    setTimeout(() => $("#check").attr("onclick", "check()"), 1000);
 }
 
 const shuffle = (array) => {
