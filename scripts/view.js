@@ -10,11 +10,12 @@ const view = {
         $(".current .right").append(`<p>${threeText}</p>`);
     },
     editPuzzle: (firstText, secondText, threeText) => {
+        $(".top").css("opacity", "1");
         // $(".overlay .top").removeClass("top").addClass("current");
         // $(".overlay .current").removeClass("current").addClass("top");
-        $(".current .left p").text(firstText);
-        $(".current .center p").text(secondText);
-        $(".current .right p").text(threeText);
+        $(".top .left p").text(firstText);
+        $(".top .center p").text(secondText);
+        $(".top .right p").text(threeText);
     },
     flashCircle: async() => {
         $(".circle").css("opacity", 0);
@@ -36,7 +37,7 @@ const view = {
     },
     end: async () => {
         await timeout(200);
-        let classes = [".left",".center", ".right"];
+        let classes = [".left", ".center", ".right"];
 
         for (let i = 0; i < classes.length; i++) {
             $(classes[i]).addClass("closed");
