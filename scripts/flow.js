@@ -40,11 +40,11 @@ const onPageLoad = async () => {
 function check() {
     view.flashCircle();
     $("#check").attr("onclick", "");
-    if ($(".current .left p").text() == data[currentIndex].first && $(".current .center p").text() == data[currentIndex].second && $(".current .right p").text() == data[currentIndex].three) {        
+    if ($(".current .left p").text() == data[currentIndex].first && $(".current .center p").text() == data[currentIndex].second && $(".current .right p").text() == data[currentIndex].three) {       
         view.toggleFlash("green");
         currentItem = [data[index].first, data[index].second, data[index].three]
         // shuffle(currentItem);
-        view.editPuzzle(currentItem[0], currentItem[1], currentItem[2])
+        view.editPuzzle(currentItem[0], currentItem[1], currentItem[2]);
         index++;
         currentIndex++;
         view.deletePuzzle();
