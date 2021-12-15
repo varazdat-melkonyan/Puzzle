@@ -42,7 +42,6 @@ const view = {
 
         for (let i = 0; i < classes.length; i++) {
             $(classes[i]).addClass("closed");
-            // $(classes[i]).css("display", "none")
         }
 
         await timeout(1000);
