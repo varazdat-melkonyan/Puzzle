@@ -135,7 +135,6 @@ body {
     height: 60%;
     width: 80%;
     box-shadow: inset -2px -2px 5px 0 #FFFFFF, inset 2px 3px 3px 1px rgba(222,222,230,0.72);
-    pointer-events: none;
 }
 
 .current {
@@ -220,7 +219,7 @@ body {
     top: 42.5px;
 }
 
-.textHolder {
+.leftTextHolder {
     position: absolute;
     top: 5px;
     left: 13.5px;
@@ -233,7 +232,7 @@ body {
     justify-content: center;
 }
 
-.valueHolder {
+.centerTextHolder {
     position: absolute;
     top: 51px;
     left: 13.5px;
@@ -246,9 +245,22 @@ body {
     justify-content: center;
 }
 
+.rightTextHolder {
+    position: absolute;
+    top: 100px;
+    left: 13.5px;
+    overflow: show;
+    width: 172px;
+    height: 40px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .item {
     position: relative;
-    height: 88px;
+    height: 150px;
     width: 199px;
     border-radius: 19px;
     background-color: #F3F3F3;
@@ -257,12 +269,18 @@ body {
     padding: 5px;
 }
 
-.textHolder p {
+.leftTextHolder p {
     font-size: 30px;
     color: #5C7CA6;
 }
 
-.valueHolder p {
+.centerTextHolder p {
+    font-size: 16px;
+    color: #9AB7DB;
+    margin-top: 4px;
+}
+
+.rightTextHolder {
     font-size: 16px;
     color: #9AB7DB;
     margin-top: 4px;
