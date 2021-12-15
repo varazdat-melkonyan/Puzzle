@@ -60,16 +60,7 @@ const view = {
             for (let j = 0; j < 3; j++) {
                 view.createItem($(".row").eq(i), allData[itemCount].first, allData[itemCount].second, allData[itemCount].three);
                 itemCount++;
-
-                // if (itemCount == originalData.length) {
-                //     view.fitText(".textHolder", 0, 0);
-                //     view.fitText(".valueHolder", 0, 0);
-                //     break;
-                // }
             }
-
-            // view.fitText(".textHolder", 0, 0);
-            // view.fitText(".valueHolder", 0, 0);
 
             await timeout(200);
         }
