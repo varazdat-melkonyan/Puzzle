@@ -25,7 +25,7 @@ const onPageLoad = async () => {
         center.push(data[i].second);
         right.push(data[i].three);
     }
-    
+
     for(let j = 0; j < Object.keys(allData[0]).length; j++) {
         view.addPuzzle(j, Object.values(allData[0])[j]);
     }
@@ -89,7 +89,7 @@ let area = { x: 0 };
 let inMotion = false;
 let coolDown = false;
 
-$(".overlay").mousedown(function (e) {
+$(".overlay div").mousedown(function (e) {
     if (!drag.ended && coolDown == false) {
         drag.mouseDownPos = e.pageX;
         drag.start = e.pageX;
@@ -97,18 +97,18 @@ $(".overlay").mousedown(function (e) {
     }
 })
 
-$(".overlay").mousemove(function (e) {
+$(".overlay div").mousemove(function (e) {
     if (drag.ended) {        
         area.x = e.pageX - drag.start;
-        $(`.obj_0`).css("transition", `none`);
+        $(`.overlay div`).css("transition", `none`);
 
-        $(`.obj_0`).each(function() {
+        $(`.overlay div`).each(function() {
             let left = parseFloat($(this).css("left"));
             $(this).css("left", left + area.x);
         });
 
         drag.start = e.pageX;
-        $(`.obj_0`).css("transition", `0.5s`);
+        $(`.overlay div`).css("transition", `0.5s`);
     }
 })
 
@@ -120,7 +120,7 @@ const mouseup = (e) => {
     if (drag.ended) {
         drag.end = e.pageX;
         drag.ended = false;
-
     }
+    
 }
 $(onPageLoad);
