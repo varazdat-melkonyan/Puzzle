@@ -19,7 +19,6 @@ const view = {
             $(".current").attr("id", "1");
             $(".top").attr("id", "0");
         }, 1000);
-
         $(`#0 .obj_${i} p`).text(text);
     },
     flashCircle: async() => {
