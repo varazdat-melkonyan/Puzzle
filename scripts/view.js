@@ -78,7 +78,7 @@ const view = {
             await timeout(20);
             
             for (let j = 0; j < 3; j++) {
-                view.createItem($(".row").eq(i), allData[itemCount].first, allData[itemCount].second, allData[itemCount].three);
+                view.createItem($(".row").eq(i), i, Object.values(allData[itemCount]));
                 itemCount++;
             }
 
@@ -87,20 +87,12 @@ const view = {
 
         $(".outcome").css("overflow", "auto");
     },
-    createItem: async (parent, leftText, centerText, rightText) => {
+    createItem: async (parent, i, text) => {
         let item = `<div class="item">
-                        <div class="leftTextHolder">
-                            <p>${leftText}</p>
+                        <div class="leftTextHolder" style="top: ${i * 10}px">
+                            <p>${text}</p>
                         </div>
-                        <div class="bar"></div>
-                        <div class="centerTextHolder">
-                            <p>${centerText}</p>
-                        </div>
-                        <div class="bar"></div>
-                        <div class="rightTextHolder">
-                            <p>${rightText}</p>
-                        </div>
-                    </div>`;
+                    </div>`
 
         $(parent).append(item);
     },
