@@ -4,7 +4,6 @@ const view = {
     addPuzzle: async (i, text) => {
         $(`.top`).append(`<div class="obj_${i} items"><p></p></div>`);
         $(`.current`).append(`<div class="obj_${i} items"><p>${text}</p></div>`);
-        // $(`.items .obj_${i}`).css("margin-left", "200px")
     },
     editPuzzle: (i, text) => {
         
