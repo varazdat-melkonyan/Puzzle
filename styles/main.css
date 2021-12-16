@@ -130,17 +130,15 @@ body {
 
 .overlay {
     position: absolute;
-    left: 100px;
-    top: 10%;
-    height: 60%;
-    width: 80%;
+    height: 70%;
+    width: 100%;
     box-shadow: inset -2px -2px 5px 0 #FFFFFF, inset 2px 3px 3px 1px rgba(222,222,230,0.72);
 }
 
 .current {
     transition: 1s;
     top: 100px;
-    left: 5%;
+    left: 20%;
     position: absolute;
 }
 
@@ -153,7 +151,11 @@ body {
 }
 
 .items {
-    margin-left: 20px;
+    left: 5%;
+    font-size: 40px;
+    color: #5C7CA6;
+    background: rgb(231, 226, 226);
+    position: absolute;
     display: inline-flex;
     font-size: 40px;
     color: #5C7CA6;
@@ -164,31 +166,6 @@ body {
     scroll-behavior: smooth;
 }
 
-.obj_1 {
-    position: absolute;
-    background: yellow;
-    left: 220px;
-    font-size: 40px;
-    color: #5C7CA6;
-}
-
-.obj_0 {
-    position: absolute;
-    background: red;
-    left: 5px;
-    font-size: 40px;
-    color: #5C7CA6;
-}
-
-.obj_2 {
-    position: absolute;
-    top: 0;
-    background: green;
-    left: 445px;
-    font-size: 40px;
-    color: #9AB7DB;
-}
-
 .left div,.center div .right div {
     margin-left: 56px;
     transition: 1s;
@@ -197,7 +174,6 @@ body {
     border-radius: 19px;
     background-color: #F3F3F3;
     box-shadow: 5px 5px 5px 0 rgba(222,222,230,0.5), -3px -3px 5px 0 #FEFEFE;
-
     position: absolute;
     display: flex;
     justify-content: center;
