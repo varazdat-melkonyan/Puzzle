@@ -82,7 +82,7 @@ function check() {
         $("#check").attr("onclick", "");
         for(let i = 0; i < Object.values(data[0]).length; i++) {
             if ($(`.current .obj_${i} p`).text() == Object.values(data[0])[i]) {       
-                view.toggleFlash("green");                
+                view.toggleFlash("green");
                 currentIndex++;
                 index++;
                 data.splice(0, 1);
