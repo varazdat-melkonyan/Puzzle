@@ -36,7 +36,8 @@ const view = {
         await timeout(820);
         $(".current").removeClass("shake");
     },
-    reverseMove: async () => {
+    reverseMove: async (item) => {
+        console.log(item);
         if ($(`.current .obj_0`).css("margin-left") > "140px" && $(`.current .obj_0`).css("margin-left") < "300px") {
             $(`.current .obj_0`).css("margin-left", "200px");
             $(`.current .obj_1`).css("margin-left", "0");

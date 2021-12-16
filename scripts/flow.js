@@ -13,6 +13,7 @@ let right = [];
 let currentItem = [];
 let secondItem = [];
 let currentIndex = 1;
+let selectItem;
 
 const onPageLoad = async () => {
     json = await $.get('data/data.json');
@@ -42,6 +43,7 @@ const onPageLoad = async () => {
     })
     
     $(".current .items").mousemove(function (e) {
+        selectItem = this;
         if (drag.ended) {        
             area.x = e.pageX - drag.start;
             $(this).css("transition", `none`);
@@ -65,7 +67,7 @@ const onPageLoad = async () => {
             drag.end = e.pageX;
             drag.ended = false;
         }
-        view.reverseMove();
+        view.reverseMove(selectItem);
     }
     loader.toggle();
 }
