@@ -50,7 +50,7 @@ const view = {
                 }
             }
         }
-        if ($(`.current .obj_0`).css("margin-left") > "380px") {
+        if ($(`.current .obj_0`).css("margin-left") > "350px") {
             $(`.current .obj_0`).css("margin-left", "400px");
             $(`.current .obj_2`).css("margin-left", "0");
         }
