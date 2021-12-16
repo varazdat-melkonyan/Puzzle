@@ -35,6 +35,25 @@ const view = {
         await timeout(820);
         $(".current").removeClass("shake");
     },
+    reverseMove: async () => {
+        if ($(`.current .obj_0`).css("left") > "140px" && $(`.current .obj_0`).css("left") < "300px") {
+            $(`.current .obj_0`).css("left", "220px");
+            $(`.current .obj_1`).css("left", "5px");
+        }
+        else {
+            $(`.current .obj_0`).css("left", "5px");
+            if($(`.current .obj_1`).css("left") == "5px") {
+                if ($(`.current .obj_0`).css("left") < "80px") {
+                    $(`.current .obj_1`).css("left", "220px");
+                    $(`.current .obj_0`).css("left", "5px");
+                }
+            }
+        }
+        if ($(`.current .obj_0`).css("left") > "380px") {
+            $(`.current .obj_0`).css("left", "445px");
+            $(`.current .obj_2`).css("left", "5px");
+        }
+    },
     end: async () => {
         await timeout(200);
         let classes = [".left", ".center", ".right", ".overlay", ".hoverable"];
