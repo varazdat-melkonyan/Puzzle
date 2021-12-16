@@ -37,22 +37,22 @@ const view = {
         $(".current").removeClass("shake");
     },
     reverseMove: async () => {
-        if ($(`.current .obj_0`).css("left") > "140px" && $(`.current .obj_0`).css("left") < "300px") {
-            $(`.current .obj_0`).css("left", "220px");
-            $(`.current .obj_1`).css("left", "5px");
+        if ($(`.current .obj_0`).css("margin-left") > "140px" && $(`.current .obj_0`).css("margin-left") < "300px") {
+            $(`.current .obj_0`).css("margin-left", "220px");
+            $(`.current .obj_1`).css("margin-left", "0");
         }
         else {
-            $(`.current .obj_0`).css("left", "5px");
-            if($(`.current .obj_1`).css("left") == "5px") {
-                if ($(`.current .obj_0`).css("left") < "80px") {
-                    $(`.current .obj_1`).css("left", "220px");
-                    $(`.current .obj_0`).css("left", "5px");
+            $(`.current .obj_0`).css("margin-left", "0");
+            if($(`.current .obj_1`).css("margin-left") == "0") {
+                if ($(`.current .obj_0`).css("margin-left") < "80px") {
+                    $(`.current .obj_1`).css("margin-left", "220px");
+                    $(`.current .obj_0`).css("margin-left", "0");
                 }
             }
         }
-        if ($(`.current .obj_0`).css("left") > "380px") {
-            $(`.current .obj_0`).css("left", "445px");
-            $(`.current .obj_2`).css("left", "5px");
+        if ($(`.current .obj_0`).css("margin-left") > "380px") {
+            $(`.current .obj_0`).css("margin-left", "440");
+            $(`.current .obj_2`).css("margin-left", "0");
         }
     },
     end: async () => {
