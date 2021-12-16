@@ -47,8 +47,8 @@ const onPageLoad = async () => {
             $(this).css("transition", `none`);
             $(this).css("z-index", `3`)
             $(this).each(function() {
-                let left = parseFloat($(this).css("left"));
-                $(this).css("left", left + area.x);
+                let left = parseFloat($(this).css("margin-left"));
+                $(this).css("margin-left", left + area.x);
             });
     
             drag.start = e.pageX;
@@ -137,8 +137,8 @@ const shuffle = (array) => {
             $(this).css("transition", `none`);
             $(this).css("z-index", `3`)
             $(this).each(function() {
-                let left = parseFloat($(this).css("left"));
-                $(this).css("left", left + area.x);
+                let left = parseFloat($(this).css("margin-left"));
+                $(this).css("margin-left", left + area.x);
             });
     
             drag.start = e.pageX;
