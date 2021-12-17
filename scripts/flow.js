@@ -14,6 +14,9 @@ let currentItem = [];
 let secondItem = [];
 let currentIndex = 1;
 let selectItem;
+let currentLeftPos;
+let currentRigthPos;
+let currentCenterPos;
 
 const onPageLoad = async () => {
     json = await $.get('data/data.json');
@@ -34,7 +37,7 @@ const onPageLoad = async () => {
     let area = { x: 0 };
     let coolDown = false;
     
-    $(".current .items").mousedown(function (e) {
+    $(".move .items").mousedown(function (e) {
         if (!drag.ended && coolDown == false) {
             drag.mouseDownPos = e.pageX;
             drag.start = e.pageX;
@@ -42,7 +45,7 @@ const onPageLoad = async () => {
         }
     })
     
-    $(".current .items").mousemove(function (e) {
+    $(".move .items").mousemove(function (e) {
         selectItem = this;
         if (drag.ended) {        
             area.x = e.pageX - drag.start;
@@ -58,7 +61,7 @@ const onPageLoad = async () => {
         }
     })
     
-    $(".current .items").mouseup(function (e) {
+    $(".move .items").mouseup(function (e) {
         mouseup(e);
     })
     
@@ -120,45 +123,5 @@ const shuffle = (array) => {
 
 	return array;
 }
-
-    let drag = { mouseDownPos: 0, start: 0, end: 0, ended: false };
-    let area = { x: 0 };
-    let coolDown = false;
-    
-    $(".current .items").mousedown(function (e) {
-        if (!drag.ended && coolDown == false) {
-            drag.mouseDownPos = e.pageX;
-            drag.start = e.pageX;
-            drag.ended = true;
-        }
-    })
-    
-    $(".current .items").mousemove(function (e) {
-        if (drag.ended) {        
-            area.x = e.pageX - drag.start;
-            $(this).css("transition", `none`);
-            $(this).css("z-index", `3`)
-            $(this).each(function() {
-                let left = parseFloat($(this).css("margin-left"));
-                $(this).css("margin-left", left + area.x);
-            });
-    
-            drag.start = e.pageX;
-            $(this).css("transition", `0.5s`);
-        }
-    })
-    
-    $(".current .items").mouseup(function (e) {
-        mouseup(e);
-    })
-    
-    const mouseup = (e) => {
-        if (drag.ended) {
-            drag.end = e.pageX;
-            drag.ended = false;
-        }
-        view.reverseMove();
-    }
-
 
 $(onPageLoad);
