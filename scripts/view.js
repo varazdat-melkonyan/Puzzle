@@ -62,7 +62,7 @@ const view = {
 
         if (index > -1) {
             $(`.obj_${index}`).css("margin-left", `${elem.startingPosition}px`);
-            $(`.obj_${elem.index}`).css("margin-left", `${elem.endPosition}px`);
+            $(`.obj_${elem.index}`).css("margin-left", `${positions[index]}px`);
         }
         else {
             $(`.obj_${elem.index}`).css("margin-left", `${elem.startingPosition}px`);
