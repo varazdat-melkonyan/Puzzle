@@ -5,6 +5,9 @@ const view = {
         $(`.top`).append(`<div class="obj_${i} items"><p></p></div>`);
         $(`.current`).append(`<div class="obj_${i} items"><p>${text}</p></div>`);
         $(`.obj_${i}`).css("margin-left", 200 * i);
+        currentLeftPos = $(`.obj_0`).css("margin-left");
+        currentCenterPos = $(`.obj_1`).css("margin-left");
+        currentRigthPos = $(`.obj_2`).css("margin-left");
     },
     editPuzzle: (i, text) => {
         
@@ -37,23 +40,16 @@ const view = {
         $(".current").removeClass("shake");
     },
     reverseMove: async (item) => {
-        console.log(item);
-        if ($(`.current .obj_0`).css("margin-left") > "140px" && $(`.current .obj_0`).css("margin-left") < "300px") {
-            $(`.current .obj_0`).css("margin-left", "200px");
-            $(`.current .obj_1`).css("margin-left", "0");
+        if ($(item).css("margin-left") > "140px" && $(item).css("margin-left") < "300px") {
+            $(".obj_1").css("margin-left", "0").removeClass("obj_1").addClass("obj_0");
+            $(item).css("margin-left", "200px").removeClass("obj_0").addClass("obj_1");
+        }
+        else if ($(item).css("margin-left") > "350px") {
+            $(".obj_2").css("margin-left", "0").removeClass("obj_2").addClass("obj_0");
+            $(item).css("margin-left", "400px").removeClass("obj_0").addClass("obj_2");
         }
         else {
-            $(`.current .obj_0`).css("margin-left", "0");
-            if($(`.current .obj_1`).css("margin-left") == "0") {
-                if ($(`.current .obj_0`).css("margin-left") < "80px") {
-                    $(`.current .obj_1`).css("margin-left", "200px");
-                    $(`.current .obj_0`).css("margin-left", "0");
-                }
-            }
-        }
-        if ($(`.current .obj_0`).css("margin-left") > "350px") {
-            $(`.current .obj_0`).css("margin-left", "400px");
-            $(`.current .obj_2`).css("margin-left", "0");
+            $(item).css("margin-left", currentLeftPos);
         }
     },
     end: async () => {
