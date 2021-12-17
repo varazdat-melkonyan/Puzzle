@@ -27,6 +27,7 @@ const onPageLoad = async () => {
     data = await $.get('data/data.json');
     data = data.elements;
     allData = json.elements;
+    shuffle(allData[0])
 
     for (let i = 0; i < data.length; i++) {
         left.push(data[i].first);
@@ -115,6 +116,7 @@ function check() {
     else {
         $("#check").attr("onclick", "");
         for (let i = 0; i < Object.values(data[0]).length; i++) {
+
             if ($(`.current .obj_${i} p`).text() == Object.values(data[0])[i]) {
                 view.toggleFlash("green");
                 currentIndex++;
