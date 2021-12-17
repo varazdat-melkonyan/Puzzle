@@ -6,9 +6,6 @@ const view = {
         $(`.top`).append(`<div class="obj_${i} items"><p></p></div>`);
         $(`.current`).append(`<div class="obj_${i} items"><p>${text}</p></div>`);
         $(`.obj_${i}`).css("margin-left", 200 * i);
-        currentLeftPos = $(`.obj_0`).css("margin-left");
-        currentCenterPos = $(`.obj_1`).css("margin-left");
-        currentRigthPos = $(`.obj_2`).css("margin-left");
     },
     editPuzzle: (i, text) => {
         $(".current").addClass("goLeft").css("opacity", 0);

@@ -150,9 +150,9 @@ body {
     position: absolute;
 }
 
-.parent {
-    height: 150px;
-    width: 150px;
+.movementDetector {
+    height: 100vh;
+    width: 100vw;
     position: absolute;
 }
 
