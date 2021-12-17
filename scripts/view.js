@@ -1,6 +1,7 @@
 const view = {
     correct: 0,
     row: `<div class="row"></div>`,
+    safeZone: 110,
     addPuzzle: async (i, text) => {
         $(`.top`).append(`<div class="obj_${i} items"><p></p></div>`);
         $(`.current`).append(`<div class="obj_${i} items"><p>${text}</p></div>`);
@@ -39,17 +40,32 @@ const view = {
         await timeout(820);
         $(".current").removeClass("shake");
     },
-    reverseMove: async (item) => {
-        if ($(item).css("margin-left") > "140px" && $(item).css("margin-left") < "300px") {
-            $(".obj_1").css("margin-left", "0").removeClass("obj_1").addClass("obj_0");
-            $(item).css("margin-left", "200px").removeClass("obj_0").addClass("obj_1");
+    changePositions: async (elem, positions) => {
+        let offsets = [];
+
+        for (let i = 0; i < positions.length; i++) {
+            if (elem.index != i) {
+                offsets[i] = elem.endPosition - positions[i];
+            }
         }
-        else if ($(item).css("margin-left") > "350px") {
-            $(".obj_2").css("margin-left", "0").removeClass("obj_2").addClass("obj_0");
-            $(item).css("margin-left", "400px").removeClass("obj_0").addClass("obj_2");
+
+        let smallestVal = Number.MAX_SAFE_INTEGER;
+        let index = -1;
+        for (let i = 0; i < offsets.length; i++) {
+            let absOffset = Math.abs(offsets[i]);
+            if (absOffset <= view.safeZone && absOffset < smallestVal) {
+                smallestVal = absOffset;
+                index = i;
+
+            }
+        }
+
+        if (index > -1) {
+            $(`.obj_${index}`).css("margin-left", `${elem.startingPosition}px`);
+            $(`.obj_${elem.index}`).css("margin-left", `${elem.endPosition}px`);
         }
         else {
-            $(item).css("margin-left", currentLeftPos);
+            $(`.obj_${elem.index}`).css("margin-left", `${elem.startingPosition}px`);
         }
     },
     end: async () => {
