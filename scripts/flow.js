@@ -14,6 +14,7 @@ let currentItem = [];
 let secondItem = [];
 let currentIndex = 1;
 let selectedItem;
+let currentData;
 
 let dragElement = { index: -1, startingPosition: -1, endPosition: -1 };
 let positions = [];
@@ -27,8 +28,9 @@ const onPageLoad = async () => {
     data = await $.get('data/data.json');
     data = data.elements;
     allData = json.elements;
-    shuffle(allData[0])
-
+    shuffle(allData[0]);
+    currentData = allData[0];
+    
     for (let i = 0; i < data.length; i++) {
         left.push(data[i].first);
         center.push(data[i].second);
@@ -116,8 +118,7 @@ function check() {
     else {
         $("#check").attr("onclick", "");
         for (let i = 0; i < Object.values(data[0]).length; i++) {
-
-            if ($(`.current .obj_${i} p`).text() == Object.values(data[0])[i]) {
+            if (currentData[i] == Object.values(data[0])[i]) {
                 view.toggleFlash("green");
                 currentIndex++;
                 index++;
