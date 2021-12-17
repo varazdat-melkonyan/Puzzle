@@ -50,7 +50,7 @@ const onPageLoad = async () => {
         if (drag.ended) {
             area.x = e.pageX - drag.start;
             $(this).css("transition", `none`);
-            $(this).css("z-index", `3`)
+            $(this).css("z-index", `3`);
             $(this).each(function() {
                 let left = parseFloat($(this).css("margin-left"));
                 $(this).css("margin-left", left + area.x);
