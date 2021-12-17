@@ -38,9 +38,13 @@ const onPageLoad = async () => {
     let coolDown = false;
     
     $(".current .items").mousedown(function (e) {
+        dragElement.index = $(this).index();
+
         $(".current .items").each(function(index) {
-            $(`.obj_${index}`).css("pointer-events", "none");
-            $(this).css("pointer-events", "auto");
+            if (index != dragElement.index) {
+                $(this).css("pointer-events", "none");
+            }
+
             let left =  $(this).css("margin-left");
             left = parseFloat(left.substring(0, left.indexOf("px")));
             positions[index] = left;
@@ -49,7 +53,6 @@ const onPageLoad = async () => {
         let pos =  $(this).css("margin-left");
         pos = parseFloat(pos.substring(0, pos.indexOf("px")));
         dragElement.startingPosition = pos;
-        dragElement.index = $(this).index();
 
         if (!drag.ended && coolDown == false) {
             drag.mouseDownPos = e.pageX;
@@ -59,6 +62,9 @@ const onPageLoad = async () => {
     })
     
     $(".current .items").mousemove(function (e) {
+        if (area.x > 15 || area.x < -15) {
+            mouseup(e);
+        }
         if (drag.ended) {
             area.x = e.pageX - drag.start;
             $(this).css("transition", `none`);
@@ -74,6 +80,12 @@ const onPageLoad = async () => {
     })
     
     $(".current .items").mouseup(function (e) {
+        mouseup(e);
+    })
+    
+    const mouseup = (e) => {
+        $(".current .items").css("pointer-events", "all");
+
         if (drag.ended) {
             drag.end = e.pageX;
             drag.ended = false;
@@ -85,7 +97,7 @@ const onPageLoad = async () => {
         dragElement.index = $(this).index();
 
         view.changePositions(dragElement, positions);
-    })
+    }
 
     loader.toggle();
 }
