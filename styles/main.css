@@ -150,6 +150,12 @@ body {
     position: absolute;
 }
 
+.parent {
+    height: 150px;
+    width: 150px;
+    position: absolute;
+}
+
 .items {
     left: 5%;
     font-size: 40px;
