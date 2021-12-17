@@ -3,9 +3,12 @@ const view = {
     row: `<div class="row"></div>`,
     safeZone: 110,
     addPuzzle: async (i, text) => {
-        $(`.top`).append(`<div class="parent_${i}" style="height: 150px; width: 150px; position: absolute;"><div class="obj_${i} items"><p></p></div></div>`);
-        $(`.current`).append(`<div class="parent_${i}" style="height: 150px; width: 150px; position: absolute;"><div class="obj_${i} items"><p>${text}</p></div><div>`);
+        $(`.top`).append(`<div class="obj_${i} items"><p></p></div>`);
+        $(`.current`).append(`<div class="obj_${i} items"><p>${text}</p></div>`);
         $(`.obj_${i}`).css("margin-left", 200 * i);
+        currentLeftPos = $(`.obj_0`).css("margin-left");
+        currentCenterPos = $(`.obj_1`).css("margin-left");
+        currentRigthPos = $(`.obj_2`).css("margin-left");
     },
     editPuzzle: (i, text) => {
         $(".current").addClass("goLeft").css("opacity", 0);
