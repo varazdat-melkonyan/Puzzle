@@ -7,9 +7,6 @@ let allData;
 let scrolling = false;
 let done = false;
 let index = 1;
-let left = [];
-let center = [];
-let right = [];
 let currentItem = [];
 let secondItem = [];
 let currentIndex = 1;
@@ -18,24 +15,19 @@ let selectItem;
 let dragElement = { index: -1, startingPosition: -1, endPosition: -1};
 let positions = [];
 
+let drag = { mouseDownPos: 0, start: 0, end: 0, ended: false };
+let area = { x: 0 };
+let coolDown = false;
+
 const onPageLoad = async () => {
     json = await $.get('data/data.json');
     data = await $.get('data/data.json');
     data = data.elements;
     allData = json.elements;
 
-    for(let i = 0; i < data.length; i++) {
-        left.push(data[i].first);
-        center.push(data[i].second);
-        right.push(data[i].three);
-    }
     for(let j = 0; j < Object.keys(allData[0]).length; j++) {
         view.addPuzzle(j, Object.values(allData[0])[j]);
     }
-
-    let drag = { mouseDownPos: 0, start: 0, end: 0, ended: false };
-    let area = { x: 0 };
-    let coolDown = false;
     
     $(".current .items").mousedown(function (e) {
         dragElement.index = $(this).index();
@@ -62,9 +54,11 @@ const onPageLoad = async () => {
     })
     
     $(".current .items").mousemove(function (e) {
-        if (area.x > 15 || area.x < -15) {
-            mouseup(e);
+        if (Math.abs(area.x) > 20) {
+            mouseup(e, this);
+            return;
         }
+
         if (drag.ended) {
             area.x = e.pageX - drag.start;
             $(this).css("transition", `none`);
@@ -80,26 +74,26 @@ const onPageLoad = async () => {
     })
     
     $(".current .items").mouseup(function (e) {
-        mouseup(e);
-    })
-    
-    const mouseup = (e) => {
         $(".current .items").css("pointer-events", "all");
-
-        if (drag.ended) {
-            drag.end = e.pageX;
-            drag.ended = false;
-        }
-
-        let pos =  $(this).css("margin-left");
-        pos = parseFloat(pos.substring(0, pos.indexOf("px")));
-        dragElement.endPosition = pos;
-        dragElement.index = $(this).index();
-
-        view.changePositions(dragElement, positions);
-    }
+        mouseup(e, this);
+    })
 
     loader.toggle();
+}
+
+const mouseup = (e, element) => {
+
+    if (drag.ended) {
+        drag.end = e.pageX;
+        drag.ended = false;
+    }
+
+    let pos =  $(element).css("margin-left");
+    pos = parseFloat(pos.substring(0, pos.indexOf("px")));
+    dragElement.endPosition = pos;
+    dragElement.index = $(element).index();
+
+    view.changePositions(dragElement, positions);
 }
 
 function check() {
