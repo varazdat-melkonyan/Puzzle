@@ -47,7 +47,7 @@ const onPageLoad = async () => {
     
     $(".move .items").mousemove(function (e) {
         selectItem = this;
-        if (drag.ended) {        
+        if (drag.ended) {
             area.x = e.pageX - drag.start;
             $(this).css("transition", `none`);
             $(this).css("z-index", `3`)
@@ -62,16 +62,13 @@ const onPageLoad = async () => {
     })
     
     $(".move .items").mouseup(function (e) {
-        mouseup(e);
-    })
-    
-    const mouseup = (e) => {
         if (drag.ended) {
             drag.end = e.pageX;
             drag.ended = false;
         }
         view.reverseMove(selectItem);
-    }
+    })
+
     loader.toggle();
 }
 
