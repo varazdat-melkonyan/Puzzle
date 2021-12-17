@@ -14,9 +14,9 @@ let currentItem = [];
 let secondItem = [];
 let currentIndex = 1;
 let selectItem;
-let currentLeftPos;
-let currentRigthPos;
-let currentCenterPos;
+
+let dragElement = { index: -1, startingPosition: -1, endPosition: -1};
+let positions = [];
 
 const onPageLoad = async () => {
     json = await $.get('data/data.json');
@@ -37,7 +37,20 @@ const onPageLoad = async () => {
     let area = { x: 0 };
     let coolDown = false;
     
-    $(".move .items").mousedown(function (e) {
+    $(".current .items").mousedown(function (e) {
+        $(".current .items").each(function(index) {
+            $(`.obj_${index}`).css("pointer-events", "none");
+            $(this).css("pointer-events", "auto");
+            let left =  $(this).css("margin-left");
+            left = parseFloat(left.substring(0, left.indexOf("px")));
+            positions[index] = left;
+        });
+
+        let pos =  $(this).css("margin-left");
+        pos = parseFloat(pos.substring(0, pos.indexOf("px")));
+        dragElement.startingPosition = pos;
+        dragElement.index = $(this).index();
+
         if (!drag.ended && coolDown == false) {
             drag.mouseDownPos = e.pageX;
             drag.start = e.pageX;
@@ -45,8 +58,7 @@ const onPageLoad = async () => {
         }
     })
     
-    $(".move .items").mousemove(function (e) {
-        selectItem = this;
+    $(".current .items").mousemove(function (e) {
         if (drag.ended) {
             area.x = e.pageX - drag.start;
             $(this).css("transition", `none`);
@@ -61,12 +73,18 @@ const onPageLoad = async () => {
         }
     })
     
-    $(".move .items").mouseup(function (e) {
+    $(".current .items").mouseup(function (e) {
         if (drag.ended) {
             drag.end = e.pageX;
             drag.ended = false;
         }
-        view.reverseMove(selectItem);
+
+        let pos =  $(this).css("margin-left");
+        pos = parseFloat(pos.substring(0, pos.indexOf("px")));
+        dragElement.endPosition = pos;
+        dragElement.index = $(this).index();
+
+        view.changePositions(dragElement, positions);
     })
 
     loader.toggle();
