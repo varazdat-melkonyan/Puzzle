@@ -151,7 +151,7 @@ body {
 }
 
 .movementDetector {
-    height: 100vh;
+    height: 70vh;
     width: 100vw;
     position: absolute;
 }
