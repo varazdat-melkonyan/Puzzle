@@ -10,9 +10,9 @@ const view = {
         currentRigthPos = $(`.obj_2`).css("margin-left");
     },
     editPuzzle: (i, text) => {
-        
         $(".current").addClass("goLeft").css("opacity", 0);
         setTimeout(() => { 
+            view.reset();
             $(".current").removeClass("goLeft");
             $("#1").removeClass("current").addClass("top");
             $(".top").css("opacity", 0);
@@ -92,4 +92,9 @@ const view = {
 
         $(parent).append(item);
     },
+    reset: async () => {
+        for (let i = 0; i < 3; i++) {
+            $(`.obj_${i}`).css("margin-left", 200 * i);
+        }
+    }
 }
