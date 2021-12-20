@@ -22,7 +22,6 @@ const view = {
                 $(".current").removeClass("top");
                 $(".current").css("opacity", 1);
             },600)
-            
         }, 500);
     },
     flashCircle: async() => {
