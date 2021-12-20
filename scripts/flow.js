@@ -84,7 +84,7 @@ const onPageLoad = async () => {
         $(".current .items").css("pointer-events", "all");
         mouseup(e, selectedItem);
     })
-
+    
     loader.toggle();
 }
 
@@ -121,7 +121,7 @@ function check() {
     }
     else {
         $("#check").attr("onclick", "");
-        
+
         if (currentData[0][0] === data[0][0] && currentData[0][1] === data[0][1] && currentData[0][2] === data[0][2]) {
             view.toggleFlash("green");
             data.splice(0, 1);
