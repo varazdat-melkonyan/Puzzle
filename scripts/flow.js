@@ -7,9 +7,6 @@ let allData;
 let moving = false;
 let done = false;
 let index = 1;
-let left = [];
-let center = [];
-let right = [];
 let currentItem = [];
 let secondItem = [];
 let currentIndex = 1;
@@ -26,36 +23,36 @@ let coolDown = false;
 const onPageLoad = async () => {
     json = await $.get('data/data.json');
     data = await $.get('data/data.json');
-    data = data.elements;
     allData = json.elements;
-    shuffle(allData[0]);
-    currentData = allData[0];
-    
-    for (let i = 0; i < data.length; i++) {
-        left.push(data[i].first);
-        center.push(data[i].second);
-        right.push(data[i].three);
-    }
-    for (let j = 0; j < Object.keys(allData[0]).length; j++) {
-        view.addPuzzle(j, Object.values(allData[0])[j]);
+    data = data.elements;
+
+    currentData = allData;
+    for (let i = 0; i < currentData.length; i++) {
+        shuffle(currentData[i]);
     }
 
-    $(".current .items").mousedown(function (e) {
-        dragElement.index = $(this).index();
+    for (let j = 0; j < Object.keys(data[0]).length; j++) {
+        view.addPuzzle(j, Object.values(currentData[0])[j]);
+    }
+
+    $(".move .items").mousedown(function (e) {
+        dragElement.index = parseFloat($(this).attr("id"));
         selectedItem = this;
         $(this).css("transition", `none`);
 
-        $(".current .items").each(function (index) {
+        $(".move .items").each(function (index) {
             if (index != dragElement.index) {
                 $(this).css("pointer-events", "none");
             }
-
-            let left = $(this).css("margin-left");
-            left = parseFloat(left.substring(0, left.indexOf("px")));
-            positions[index] = left;
         });
 
-        let pos = $(this).css("margin-left");
+        for (let i = 0; i < $(".items").length; i++) {
+            let left = $(`#${i}`).css("left");
+            left = parseFloat(left.substring(0, left.indexOf("px")));
+            positions[i] = left;
+        }
+
+        let pos = $(this).css("left");
         pos = parseFloat(pos.substring(0, pos.indexOf("px")));
         dragElement.startingPosition = pos;
 
@@ -70,10 +67,11 @@ const onPageLoad = async () => {
     $(".movementDetector").mousemove(function (e) {
         if (drag.ended) {
             area.x = e.pageX - drag.start;
+            $(".items").css("z-index", 0);
             $(selectedItem).css("z-index", `3`);
             $(selectedItem).each(function () {
-                let left = parseFloat($(selectedItem).css("margin-left"));
-                $(selectedItem).css("margin-left", left + area.x);
+                let left = parseFloat($(selectedItem).css("left"));
+                $(selectedItem).css("left", left + area.x);
             });
 
             drag.start = e.pageX;
@@ -90,18 +88,24 @@ const onPageLoad = async () => {
     loader.toggle();
 }
 
-const mouseup = (e, element) => {
+const mouseup = async (e, element) => {
     $(".current .items").css("pointer-events", "none");
     if (drag.ended) {
         drag.end = e.pageX;
         drag.ended = false;
     }
 
-    let pos = $(element).css("margin-left");
+    let pos = $(element).css("left");
     pos = parseFloat(pos.substring(0, pos.indexOf("px")));
     dragElement.endPosition = pos;
-    dragElement.index = $(element).index();
-    view.changePositions(dragElement, positions);
+    let index = await view.changePositions(dragElement, positions);
+    let startingData                        = currentData[0][dragElement.index];
+    let endingData                          = currentData[0][index];
+    if (index > -1) {
+        currentData[0][index]               = startingData;
+        currentData[0][dragElement.index]   = endingData;
+    }
+
     setTimeout(() => {
         $(".current .items").css("pointer-events", "all");
     }, 300);
@@ -117,20 +121,19 @@ function check() {
     }
     else {
         $("#check").attr("onclick", "");
-        for (let i = 0; i < Object.values(data[0]).length; i++) {
-            if (currentData[i] == Object.values(data[0])[i]) {
-                view.toggleFlash("green");
-                currentIndex++;
-                index++;
-                data.splice(0, 1);
-                for (let j = 0; j < Object.values(data[0]).length; j++) {
-                    view.editPuzzle(j, Object.values(data[0])[j]);
-                }
+        
+        if (currentData[0][0] === data[0][0] && currentData[0][1] === data[0][1] && currentData[0][2] === data[0][2]) {
+            view.toggleFlash("green");
+            data.splice(0, 1);
+            currentData.splice(0, 1);
+
+            for (let j = 0; j < Object.values(data[0]).length; j++) {
+                view.editPuzzle(j, Object.values(currentData[0])[j]);
             }
-            else {
-                view.toggleFlash("red");
-                view.shake();
-            }
+        }
+        else {
+            view.toggleFlash("red");
+            view.shake();
         }
 
         setTimeout(() => {

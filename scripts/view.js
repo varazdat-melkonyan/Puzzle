@@ -3,24 +3,23 @@ const view = {
     row: `<div class="row"></div>`,
     safeZone: 110,
     addPuzzle: async (i, text) => {
-        $(`.top`).append(`<div class="obj_${i} items"><p></p></div>`);
-        $(`.current`).append(`<div class="obj_${i} items"><p>${text}</p></div>`);
-        $(`.obj_${i}`).css("margin-left", 200 * i);
+        $(`.current`).append(`<div id="${i}" class="items"><p>${text}</p></div>`);
+        $(`#${i}`).css("left", 200 * i);
     },
     editPuzzle: (i, text) => {
         $(".current").addClass("goLeft").css("opacity", 0);
         setTimeout(() => { 
             view.reset();
             $(".current").removeClass("goLeft");
-            $("#1").removeClass("current").addClass("top");
-            $(".top").css("opacity", 0);
-            $("#1 .top").css("top", "-150px");
-            $("#0").removeClass("top").addClass("current");
-            $(".current").css("opacity", 1);
-            $(".current").attr("id", "1");
-            $(".top").attr("id", "0");
-        }, 1000);
-        $(`#0 .obj_${i} p`).text(text);
+            $(".current").addClass("top");
+            $(`.current #${i} p`).text(text);
+            setTimeout(() => {
+                $(".current").removeClass("top");
+                $(".current").css("opacity", 1);
+            },600)
+            
+        }, 500);
+        
     },
     flashCircle: async() => {
         $(".circle").css("opacity", 0);
@@ -50,20 +49,26 @@ const view = {
         let index = -1;
         for (let i = 0; i < offsets.length; i++) {
             let absOffset = Math.abs(offsets[i]);
+            
             if (absOffset <= view.safeZone && absOffset < smallestVal) {
                 smallestVal = absOffset;
                 index = i;
-
             }
         }
 
         if (index > -1) {
-            $(`.obj_${index}`).css("margin-left", `${elem.startingPosition}px`);
-            $(`.obj_${elem.index}`).css("margin-left", `${positions[index]}px`);
+            $(`#${index}`).css("left",      `${elem.startingPosition}px`);
+            $(`#${elem.index}`).css("left", `${positions[index]}px`);
+
+            let old = $(`#${elem.index}`);
+            $(`#${index}`).attr("id", elem.index);
+            old.attr("id", index);
         }
         else {
-            $(`.obj_${elem.index}`).css("margin-left", `${elem.startingPosition}px`);
+            $(`#${elem.index}`).css("left", `${elem.startingPosition}px`);
         }
+        
+        return index;
     },
     end: async () => {
         await timeout(200);
@@ -78,8 +83,9 @@ const view = {
         $(".outcome").addClass("showOutcome");
         $(".outcomeOverlay").addClass("showOutcome");
         $(".outcomeOverlay").show();
-
-        let rowCount = Math.ceil(allData.length / 3);
+        let rowData = await $.get('data/data.json');
+        rowData = rowData.elements;
+        let rowCount = Math.ceil(rowData.length / 3);
         let itemCount = 0;
 
         for (let i = 0; i < rowCount; i++) {
@@ -87,7 +93,7 @@ const view = {
             await timeout(20);
             
             for (let j = 0; j < 3; j++) {
-                view.createItem($(".row").eq(i), i, Object.values(allData[itemCount]));
+                view.createItem($(".row").eq(i), i, Object.values(rowData[itemCount]));
                 itemCount++;
             }
 
@@ -107,7 +113,7 @@ const view = {
     },
     reset: async () => {
         for (let i = 0; i < 3; i++) {
-            $(`.obj_${i}`).css("margin-left", 200 * i);
+            $(`#${i}`).css("left", 200 * i);
         }
     }
 }
