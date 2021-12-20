@@ -31,8 +31,8 @@ const onPageLoad = async () => {
         shuffle(currentData[i]);
     }
 
-    for (let j = 0; j < Object.keys(data[0]).length; j++) {
-        view.addPuzzle(j, Object.values(currentData[0])[j]);
+    for (let j = 0; j < data[0].length; j++) {
+        view.addPuzzle(j, currentData[0][j]);
     }
 
     $(".move .items").mousedown(function (e) {
@@ -127,8 +127,8 @@ function check() {
             data.splice(0, 1);
             currentData.splice(0, 1);
 
-            for (let j = 0; j < Object.values(data[0]).length; j++) {
-                view.editPuzzle(j, Object.values(currentData[0])[j]);
+            for (let j = 0; j < data[0].length; j++) {
+                view.editPuzzle(j, currentData[0][j]);
             }
         }
         else {
