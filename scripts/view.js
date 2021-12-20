@@ -24,7 +24,6 @@ const view = {
             },600)
             
         }, 500);
-        
     },
     flashCircle: async() => {
         $(".circle").css("opacity", 0);
@@ -89,7 +88,7 @@ const view = {
         $(".outcome").addClass("showOutcome");
         $(".outcomeOverlay").addClass("showOutcome");
         $(".outcomeOverlay").show();
-        
+
         let rowData = await $.get('data/data.json');
         rowData = rowData.elements;
         let rowCount = Math.ceil(rowData.length / 3);
@@ -99,7 +98,7 @@ const view = {
             $(".outcome").append(view.row);
             await timeout(20);
             
-            for (let j = 0; j < 3; j++) {
+            for (let j = 0; j < $(`.items`).length; j++) {
                 view.createItem($(".row").eq(i), i, rowData[itemCount]);
                 itemCount++;
             }
@@ -119,7 +118,7 @@ const view = {
         $(parent).append(item);
     },
     reset: async () => {
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < $(`.items`).length; i++) {
             $(`#${i}`).css("left", 200 * i);
         }
     }
