@@ -1,10 +1,15 @@
 const view = {
     correct: 0,
     row: `<div class="row"></div>`,
-    safeZone: 110,
+    safeZone: 36.6666666667,
     addPuzzle: async (i, text) => {
         $(`.current`).append(`<div id="${i}" class="items"><p>${text}</p></div>`);
-        $(`#${i}`).css("left", 200 * i);
+        $(`.items`).css({
+            "width": 450 / $(`.items`).length, 
+            "height": 450 / $(`.items`).length
+        });
+        $(`.current`).css("left", `${60 / $(`.items`).length}%`);
+        $(`#${i}`).css("left", 600 / 3 * i);
     },
     editPuzzle: (i, text) => {
         $(".current").addClass("goLeft").css("opacity", 0);
@@ -37,6 +42,7 @@ const view = {
         $(".current").removeClass("shake");
     },
     changePositions: async (elem, positions) => {
+        view.safeZone = 36.6666666667 * $(".items").length;
         let offsets = [];
 
         for (let i = 0; i < positions.length; i++) {
@@ -83,6 +89,7 @@ const view = {
         $(".outcome").addClass("showOutcome");
         $(".outcomeOverlay").addClass("showOutcome");
         $(".outcomeOverlay").show();
+        
         let rowData = await $.get('data/data.json');
         rowData = rowData.elements;
         let rowCount = Math.ceil(rowData.length / 3);
@@ -93,7 +100,7 @@ const view = {
             await timeout(20);
             
             for (let j = 0; j < 3; j++) {
-                view.createItem($(".row").eq(i), i, Object.values(rowData[itemCount]));
+                view.createItem($(".row").eq(i), i, rowData[itemCount]);
                 itemCount++;
             }
 
