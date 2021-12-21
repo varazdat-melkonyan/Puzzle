@@ -119,8 +119,7 @@ function check() {
     }
     else {
         $("#check").attr("onclick", "");
-        if (Array.isArray(currentData[0]) && Array.isArray(data[0]) && currentData[0].length === data[0].length 
-                && currentData[0].every((val, index) => val === data[0][index])) {
+        if (currentData[0].length === data[0].length && currentData[0].every((val, index) => val === data[0][index])) {
             view.toggleFlash("green");
             data.splice(0, 1);
             currentData.splice(0, 1);
