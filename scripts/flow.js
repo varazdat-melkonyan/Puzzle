@@ -119,11 +119,12 @@ function check() {
     }
     else {
         $("#check").attr("onclick", "");
-        if (currentData[0][0] === data[0][0] && currentData[0][1] === data[0][1] && currentData[0][2] === data[0][2]) {
+        if (Array.isArray(currentData[0]) && Array.isArray(data[0]) && currentData[0].length === data[0].length 
+                && currentData[0].every((val, index) => val === data[0][index])) {
             view.toggleFlash("green");
             data.splice(0, 1);
             currentData.splice(0, 1);
-
+            // $(`.current .items`).remove();
             for (let j = 0; j < data[0].length; j++) {
                 view.editPuzzle(j, currentData[0][j]);
             }
