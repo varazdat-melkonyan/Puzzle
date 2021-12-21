@@ -36,8 +36,6 @@ const onPageLoad = async () => {
     loader.toggle();
 }
 
-
-
 function moveMouse() {
     $(".move .items").mousedown(function (e) {
         dragElement.index = parseFloat($(this).attr("id"));
