@@ -12,7 +12,7 @@ const view = {
     },
     editPuzzle: async (i, text) => {
         $(".current").addClass("goLeft").css("opacity", 0);
-        await timeout(500)
+        await timeout(1500)
         view.reset();
         $(".current").removeClass("goLeft");
         $(".current").addClass("top");
@@ -23,7 +23,7 @@ const view = {
         });
         $(`.current`).css("left", `${60 / $(`.items`).length}%`);
         $(`#${i}`).css("left", 200 * i);
-        await timeout(600)
+        await timeout(800)
         $(".current").removeClass("top");
             addEvents();
         $(".current").css("opacity", 1);
