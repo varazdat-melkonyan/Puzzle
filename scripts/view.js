@@ -4,44 +4,41 @@ const view = {
     addPuzzle: async (i, text) => {
         $(`.current`).append(`<div id="${i}" class="items"><p>${text}</p></div>`);
         $(`.items`).css({
-            "width": 450 / $(`.items`).length, 
+            "width": 450 / $(`.items`).length,
             "height": 450 / $(`.items`).length
         });
         $(`.current`).css("left", `${60 / $(`.items`).length}%`);
         $(`#${i}`).css("left", 200 * i);
-        moveMouse();
     },
-    editPuzzle: (i, text) => {
+    editPuzzle: async (i, text) => {
         $(".current").addClass("goLeft").css("opacity", 0);
-        setTimeout(() => { 
-            view.reset();
-            $(".current").removeClass("goLeft");
-            $(".current").addClass("top");
-            // $(`.current`).append(`<div id="${i}" class="items"><p>${text}</p></div>`);
-            // $(`.items`).css({
-            //     "width": 450 / $(`.items`).length, 
-            //     "height": 450 / $(`.items`).length
-            // });
-            // $(`.current`).css("left", `${60 / $(`.items`).length}%`);
-            // $(`#${i}`).css("left", 200 * i);
-            $(`.current #${i} p`).text(text);
-            // moveMouse();
-            setTimeout(() => {
-                $(".current").removeClass("top");
-                $(".current").css("opacity", 1);
-            },600);
-        }, 500);
+        await timeout(500)
+        view.reset();
+        $(".current").removeClass("goLeft");
+        $(".current").addClass("top");
+        $(`.current`).append(`<div id="${i}" class="items"><p>${text}</p></div>`);
+        $(`.items`).css({
+            "width": 450 / $(`.items`).length,
+            "height": 450 / $(`.items`).length
+        });
+        $(`.current`).css("left", `${60 / $(`.items`).length}%`);
+        $(`#${i}`).css("left", 200 * i);
+        await timeout(600)
+        $(".current").removeClass("top");
+            addEvents();
+        $(".current").css("opacity", 1);
+
     },
-    flashCircle: async() => {
+    flashCircle: async () => {
         $(".circle").css("opacity", 0);
         await timeout(300);
         $(".circle").css("opacity", 1);
     },
-    toggleFlash: async(color) => {
-		$(`#${color}`).css("opacity", 1);
-		await timeout(500);
-		$(`#${color}`).css("opacity", 0);
-	},
+    toggleFlash: async (color) => {
+        $(`#${color}`).css("opacity", 1);
+        await timeout(500);
+        $(`#${color}`).css("opacity", 0);
+    },
     shake: async () => {
         $(".current").addClass("shake");
         await timeout(820);
@@ -61,7 +58,7 @@ const view = {
         let index = -1;
         for (let i = 0; i < offsets.length; i++) {
             let absOffset = Math.abs(offsets[i]);
-            
+
             if (absOffset <= view.safeZone && absOffset < smallestVal) {
                 smallestVal = absOffset;
                 index = i;
@@ -69,7 +66,7 @@ const view = {
         }
 
         if (index > -1) {
-            $(`#${index}`).css("left",      `${elem.startingPosition}px`);
+            $(`#${index}`).css("left", `${elem.startingPosition}px`);
             $(`#${elem.index}`).css("left", `${positions[index]}px`);
 
             let old = $(`#${elem.index}`);
@@ -79,7 +76,7 @@ const view = {
         else {
             $(`#${elem.index}`).css("left", `${elem.startingPosition}px`);
         }
-        
+
         return index;
     },
     end: async () => {
@@ -104,7 +101,7 @@ const view = {
         for (let i = 0; i < rowCount; i++) {
             $(".outcome").append(view.row);
             await timeout(20);
-            
+
             for (let j = 0; j < $(`.items`).length; j++) {
                 view.createItem($(".row").eq(i), i, rowData[itemCount]);
                 itemCount++;

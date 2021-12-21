@@ -32,39 +32,15 @@ const onPageLoad = async () => {
     for (let j = 0; j < data[0].length; j++) {
         view.addPuzzle(j, currentData[0][j]);
     }
+
+    moveMouse();
     
     loader.toggle();
 }
 
 function moveMouse() {
-    $(".move .items").mousedown(function (e) {
-        dragElement.index = parseFloat($(this).attr("id"));
-        selectedItem = this;
-        $(this).css("transition", `none`);
-
-        $(".move .items").each(function (index) {
-            if (index != dragElement.index) {
-                $(this).css("pointer-events", "none");
-            }
-        });
-
-        for (let i = 0; i < $(".items").length; i++) {
-            let left = $(`#${i}`).css("left");
-            left = parseFloat(left.substring(0, left.indexOf("px")));
-            positions[i] = left;
-        }
-
-        let pos = $(this).css("left");
-        pos = parseFloat(pos.substring(0, pos.indexOf("px")));
-        dragElement.startingPosition = pos;
-
-        if (!drag.ended && coolDown == false) {
-            drag.mouseDownPos = e.pageX;
-            drag.start = e.pageX;
-            drag.ended = true;
-        }
-        $(".movementDetector").css("z-index", 10);
-    });
+    addEvents();
+    $(".move .items").mousedown(function (e) {});
 
     $(".movementDetector").mousemove(function (e) {
         if (drag.ended) {
@@ -86,33 +62,61 @@ function moveMouse() {
         $(".current .items").css("pointer-events", "all");
         mouseup(e, selectedItem);
     })
-
-    const mouseup = async (e, element) => {
-        console.log(e);
-        $(".current .items").css("pointer-events", "none");
-        if (drag.ended) {
-            drag.end = e.pageX;
-            drag.ended = false;
-        }
-    
-        let pos = $(element).css("left");
-        pos = parseFloat(pos.substring(0, pos.indexOf("px")));
-        dragElement.endPosition = pos;
-        let index = await view.changePositions(dragElement, positions);
-        let startingData                        = currentData[0][dragElement.index];
-        let endingData                          = currentData[0][index];
-        if (index > -1) {
-            currentData[0][index]               = startingData;
-            currentData[0][dragElement.index]   = endingData;
-        }
-    
-        setTimeout(() => {
-            $(".current .items").css("pointer-events", "all");
-        }, 300);
-    }
 }
 
-function check() {
+const mousedown = async (e, downElement) => {
+    selectedItem = downElement;
+    dragElement.index = parseFloat($(selectedItem).attr("id"));
+    $(selectedItem).css("transition", `none`);
+
+    $(".move .items").each(function (index) {
+        if (index != dragElement.index) {
+            $(selectedItem).css("pointer-events", "none");
+        }
+    });
+
+    for (let i = 0; i < $(".items").length; i++) {
+        let left = $(`#${i}`).css("left");
+        left = parseFloat(left.substring(0, left.indexOf("px")));
+        positions[i] = left;
+    }
+
+    let pos = $(selectedItem).css("left");
+    pos = parseFloat(pos.substring(0, pos.indexOf("px")));
+    dragElement.startingPosition = pos;
+
+    if (!drag.ended && coolDown == false) {
+        drag.mouseDownPos = e.pageX;
+        drag.start = e.pageX;
+        drag.ended = true;
+    }
+    $(".movementDetector").css("z-index", 10);
+}
+
+const mouseup = async (e, element) => {
+    $(".current .items").css("pointer-events", "none");
+    if (drag.ended) {
+        drag.end = e.pageX;
+        drag.ended = false;
+    }
+
+    let pos = $(element).css("left");
+    pos = parseFloat(pos.substring(0, pos.indexOf("px")));
+    dragElement.endPosition = pos;
+    let index = await view.changePositions(dragElement, positions);
+    let startingData                        = currentData[0][dragElement.index];
+    let endingData                          = currentData[0][index];
+    if (index > -1) {
+        currentData[0][index]               = startingData;
+        currentData[0][dragElement.index]   = endingData;
+    }
+
+    setTimeout(() => {
+        $(".current .items").css("pointer-events", "all");
+    }, 300);
+}
+
+const check = async () => {
     moving = true;
     view.flashCircle();
     if (data.length < 2) {
@@ -124,9 +128,13 @@ function check() {
         $("#check").attr("onclick", "").addClass("disable");
         if (currentData[0].length === data[0].length && currentData[0].every((val, index) => val === data[0][index])) {
             view.toggleFlash("green");
+            await removeEvents();
+
             data.splice(0, 1);
             currentData.splice(0, 1);
-            // $(`.current .items`).remove();
+            $(`.current .items`).remove();
+
+            positions = [];
             for (let j = 0; j < data[0].length; j++) {
                 view.editPuzzle(j, currentData[0][j]);
             }
@@ -137,10 +145,27 @@ function check() {
         }
 
         setTimeout(() => {
+            addEvents();
             $("#check").attr("onclick", "check()").removeClass("disable");
             moving = false;
         }, 2000);
         setTimeout(() => $("#check").removeClass("disable"), 1000);
+    }
+}
+
+const removeEvents = async () => {
+    for (let i = 0; i < currentData[0].length; i++) {
+        let obj = document.getElementById(i.toString());
+        obj.removeEventListener("mousedown", mousedown);
+    }
+}
+
+const addEvents = async () => {
+    for (let i = 0; i < currentData[0].length; i++) {
+        let obj = document.getElementById(i.toString());
+        obj.addEventListener("mousedown", function(e) {
+            mousedown(e, obj);
+        })
     }
 }
 
@@ -158,7 +183,5 @@ const shuffle = (array) => {
 
     return array;
 }
-
-
 
 $(onPageLoad);
