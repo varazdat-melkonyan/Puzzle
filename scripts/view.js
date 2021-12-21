@@ -1,5 +1,4 @@
 const view = {
-    correct: 0,
     row: `<div class="row"></div>`,
     safeZone: 36.6666666667,
     addPuzzle: async (i, text) => {
@@ -17,6 +16,13 @@ const view = {
             view.reset();
             $(".current").removeClass("goLeft");
             $(".current").addClass("top");
+            // $(`.current`).append(`<div id="${i}" class="items"><p>${text}</p></div>`);
+            // $(`.items`).css({
+            //     "width": 450 / $(`.items`).length, 
+            //     "height": 450 / $(`.items`).length
+            // });
+            // $(`.current`).css("left", `${60 / $(`.items`).length}%`);
+            // $(`#${i}`).css("left", 600 / 3 * i);
             $(`.current #${i} p`).text(text);
             setTimeout(() => {
                 $(".current").removeClass("top");
