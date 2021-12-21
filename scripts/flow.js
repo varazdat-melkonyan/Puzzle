@@ -32,7 +32,13 @@ const onPageLoad = async () => {
     for (let j = 0; j < data[0].length; j++) {
         view.addPuzzle(j, currentData[0][j]);
     }
+    
+    loader.toggle();
+}
 
+
+
+function moveMouse() {
     $(".move .items").mousedown(function (e) {
         dragElement.index = parseFloat($(this).attr("id"));
         selectedItem = this;
@@ -82,31 +88,30 @@ const onPageLoad = async () => {
         $(".current .items").css("pointer-events", "all");
         mouseup(e, selectedItem);
     })
+
+    const mouseup = async (e, element) => {
+        console.log(e);
+        $(".current .items").css("pointer-events", "none");
+        if (drag.ended) {
+            drag.end = e.pageX;
+            drag.ended = false;
+        }
     
-    loader.toggle();
-}
-
-const mouseup = async (e, element) => {
-    $(".current .items").css("pointer-events", "none");
-    if (drag.ended) {
-        drag.end = e.pageX;
-        drag.ended = false;
+        let pos = $(element).css("left");
+        pos = parseFloat(pos.substring(0, pos.indexOf("px")));
+        dragElement.endPosition = pos;
+        let index = await view.changePositions(dragElement, positions);
+        let startingData                        = currentData[0][dragElement.index];
+        let endingData                          = currentData[0][index];
+        if (index > -1) {
+            currentData[0][index]               = startingData;
+            currentData[0][dragElement.index]   = endingData;
+        }
+    
+        setTimeout(() => {
+            $(".current .items").css("pointer-events", "all");
+        }, 300);
     }
-
-    let pos = $(element).css("left");
-    pos = parseFloat(pos.substring(0, pos.indexOf("px")));
-    dragElement.endPosition = pos;
-    let index = await view.changePositions(dragElement, positions);
-    let startingData                        = currentData[0][dragElement.index];
-    let endingData                          = currentData[0][index];
-    if (index > -1) {
-        currentData[0][index]               = startingData;
-        currentData[0][dragElement.index]   = endingData;
-    }
-
-    setTimeout(() => {
-        $(".current .items").css("pointer-events", "all");
-    }, 300);
 }
 
 function check() {
@@ -155,5 +160,7 @@ const shuffle = (array) => {
 
     return array;
 }
+
+
 
 $(onPageLoad);
