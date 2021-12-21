@@ -8,7 +8,7 @@ const view = {
             "height": 450 / $(`.items`).length
         });
         $(`.current`).css("left", `${60 / $(`.items`).length}%`);
-        $(`#${i}`).css("left", 600 / 3 * i);
+        $(`#${i}`).css("left", 600 / allData[0].length * i);
     },
     editPuzzle: (i, text) => {
         $(".current").addClass("goLeft").css("opacity", 0);
@@ -22,7 +22,7 @@ const view = {
             //     "height": 450 / $(`.items`).length
             // });
             // $(`.current`).css("left", `${60 / $(`.items`).length}%`);
-            // $(`#${i}`).css("left", 600 / 3 * i);
+            // $(`#${i}`).css("left", 600 / data[0].length * i);
             $(`.current #${i} p`).text(text);
             setTimeout(() => {
                 $(".current").removeClass("top");
