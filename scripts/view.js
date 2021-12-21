@@ -88,7 +88,7 @@ const view = {
             $(classes[i]).addClass("closed");
         }
 
-        await timeout(1000);
+        await timeout(500);
         $(".outcome").show();
         $(".outcome").addClass("showOutcome");
         $(".outcomeOverlay").addClass("showOutcome");
