@@ -27,7 +27,7 @@ const view = {
             setTimeout(() => {
                 $(".current").removeClass("top");
                 $(".current").css("opacity", 1);
-            },600)
+            },600);
         }, 500);
     },
     flashCircle: async() => {

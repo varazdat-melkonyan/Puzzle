@@ -118,7 +118,7 @@ function check() {
         $("#check").css("display", "none");
     }
     else {
-        $("#check").attr("onclick", "");
+        $("#check").attr("onclick", "").addClass("disable");
         if (currentData[0].length === data[0].length && currentData[0].every((val, index) => val === data[0][index])) {
             view.toggleFlash("green");
             data.splice(0, 1);
@@ -134,9 +134,10 @@ function check() {
         }
 
         setTimeout(() => {
-            $("#check").attr("onclick", "check()");
+            $("#check").attr("onclick", "check()").removeClass("disable");
             moving = false;
         }, 2000);
+        setTimeout(() => $("#check").removeClass("disable"), 1000);
     }
 }
 

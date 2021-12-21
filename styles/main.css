@@ -48,6 +48,11 @@ body {
 	left: 431px;
 }
 
+.disable {
+    filter: grayscale(1);
+    opacity: 0.6;
+}
+
 .icon {
     position: absolute;
     width: 17px;
