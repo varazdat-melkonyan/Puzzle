@@ -107,9 +107,10 @@ const view = {
             // console.log(elem.index);
             let old = $(`#${elem.index}`);
             for (let i = index; i < data[0].length - 1; i++) {
-                $(`#${i}`).css("left", `${positions[i + 1]}px`);
-                $(`#${i}`).attr("id", i +1);
-                old.attr("id", index);
+                console.log($(`#${i}`));
+                $(`#${i}`).css("left", `${positions[index + i]}px`);
+                // $(`#${i}`).attr("id", i + 1);
+                // old.attr("id", index); 
             }
             console.log(index);
         }

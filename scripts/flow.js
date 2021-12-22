@@ -103,7 +103,7 @@ const mouseup = async (e, element) => {
     let pos = $(element).css("left");
     pos = parseFloat(pos.substring(0, pos.indexOf("px")));
     dragElement.endPosition = pos;
-    let index = await view.changePositions(dragElement, positions);
+    let index = await view.changePositionsNew(dragElement, positions);
     let startingData                        = currentData[0][dragElement.index];
     let endingData                          = currentData[0][index];
     if (index > -1) {
