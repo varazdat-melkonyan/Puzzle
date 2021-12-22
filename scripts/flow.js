@@ -132,7 +132,8 @@ const check = async () => {
 
             data.splice(0, 1);
             currentData.splice(0, 1);
-            $(`.current .items`).remove();
+            
+            setTimeout(() => $(`.current .items`).remove(), 200);
 
             positions = [];
             for (let j = 0; j < data[0].length; j++) {
