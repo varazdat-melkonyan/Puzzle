@@ -79,6 +79,46 @@ const view = {
 
         return index;
     },
+    changePositionsNew: async (elem, positions) => {
+        view.safeZone = 36.6666666667 * $(".items").length;
+        let offsets = [];
+
+        for (let i = 0; i < positions.length; i++) {
+            if (elem.index != i) {
+                offsets[i] = elem.endPosition - positions[i];
+            }
+        }
+
+        let smallestVal = Number.MAX_SAFE_INTEGER;
+        let index = -1;
+        for (let i = 0; i < offsets.length; i++) {
+            let absOffset = Math.abs(offsets[i]);
+
+            if (absOffset <= view.safeZone && absOffset < smallestVal) {
+                smallestVal = absOffset;
+                index = i;
+            }
+        }
+
+        if (index > -1) {
+            $(`#${index}`).css("left", `${elem.startingPosition}px`);
+            // $(`#${elem.index}`).css("left", `${positions[index]}px`);
+            // console.log(index);
+            // console.log(elem.index);
+            let old = $(`#${elem.index}`);
+            for (let i = index; i < data[0].length - 1; i++) {
+                $(`#${i}`).css("left", `${positions[i + 1]}px`);
+                $(`#${i}`).attr("id", i +1);
+                old.attr("id", index);
+            }
+            console.log(index);
+        }
+        else {
+            $(`#${elem.index}`).css("left", `${elem.startingPosition}px`);
+        }
+
+        return index;
+    },
     end: async () => {
         await timeout(200);
         let classes = [".left", ".center", ".right", ".overlay", ".hoverable"];
