@@ -44,7 +44,7 @@ const view = {
         await timeout(820);
         $(".current").removeClass("shake");
     },
-    changePositions: async (elem, positions) => {
+    changePositions: async (elem, positions) => {               //two items change pos
         view.safeZone = 36.6666666667 * $(".items").length;
         let offsets = [];
 
@@ -79,7 +79,7 @@ const view = {
 
         return index;
     },
-    changePositionsNew: async (elem, positions) => {
+    changePositionsNew: async (elem, positions) => {            //all items change pos
         view.safeZone = 36.6666666667 * $(".items").length;
         let offsets = [];
 
@@ -101,18 +101,32 @@ const view = {
         }
 
         if (index > -1) {
-            $(`#${index}`).css("left", `${elem.startingPosition}px`);
-            // $(`#${elem.index}`).css("left", `${positions[index]}px`);
-            // console.log(index);
-            // console.log(elem.index);
-            let old = $(`#${elem.index}`);
-            for (let i = index; i < data[0].length - 1; i++) {
-                console.log($(`#${i}`));
-                $(`#${i}`).css("left", `${positions[i + 1]}px`);
-                // $(`#${i}`).attr("id", i + 1);
-                // old.attr("id", index); 
+            $(`#${elem.index}`).css("left", `${positions[index]}px`);
+
+            if (index < elem.index) {
+                for (let i = index; i < elem.index; i++) {
+                    $(`#${i}`).css("left", `${positions[i + 1]}px`);
+                }
             }
-            console.log(index);
+            else {
+                for (let i = index; i > elem.index; i--) {
+                    $(`#${i}`).css("left", `${positions[i - 1]}px`);
+                }
+            }
+
+            setTimeout(() => {
+                $(".items").each(function() {
+                    let left = $(this).css("left");
+                    left = parseFloat(left.substring(0, left.indexOf("px")));
+                    
+                    for (let i = 0; i < positions.length; i++) {
+                        if (positions[i] - left < 0.2) {
+                            $(this).attr("id", i);
+                            continue;
+                        }
+                    }
+                })
+            }, 500);
         }
         else {
             $(`#${elem.index}`).css("left", `${elem.startingPosition}px`);

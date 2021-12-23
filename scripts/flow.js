@@ -93,7 +93,7 @@ const mousedown = async (e, downElement) => {
     $(".movementDetector").css("z-index", 10);
 }
 
-const mouseup = async (e, element) => {
+const mouseupOld = async (e, element) => {                      //two items change pos
     $(".current .items").css("pointer-events", "none");
     if (drag.ended) {
         drag.end = e.pageX;
@@ -103,7 +103,7 @@ const mouseup = async (e, element) => {
     let pos = $(element).css("left");
     pos = parseFloat(pos.substring(0, pos.indexOf("px")));
     dragElement.endPosition = pos;
-    let index = await view.changePositionsNew(dragElement, positions);
+    let index = await view.changePositions(dragElement, positions);
     let startingData                        = currentData[0][dragElement.index];
     let endingData                          = currentData[0][index];
     if (index > -1) {
@@ -116,17 +116,42 @@ const mouseup = async (e, element) => {
     }, 300);
 }
 
+const mouseup = async (e, element) => {                       //all items change pos
+    $(".current .items").css("pointer-events", "none");
+    if (drag.ended) {
+        drag.end = e.pageX;
+        drag.ended = false;
+    }
+
+    let pos = $(element).css("left");
+    pos = parseFloat(pos.substring(0, pos.indexOf("px")));
+    dragElement.endPosition = pos;
+    let index = await view.changePositionsNew(dragElement, positions);
+
+    setTimeout(() => {
+        $(".current .items").css("pointer-events", "all");
+
+        if (index > -1) {
+            for (let i = 0; i < $(".items").length; i++) {
+                let text = $(`#${i}`).find("p").html();
+                currentData[0][i] = text;
+            }
+
+        }
+    }, 550);
+}
+
 const check = async () => {
     moving = true;
     view.flashCircle();
-    if (data.length < 2) {
-        done = true;
-        view.end();
-        $("#check").css("display", "none");
-    }
-    else {
-        $("#check").attr("onclick", "").addClass("disable");
-        if (currentData[0].length === data[0].length && currentData[0].every((val, index) => val === data[0][index])) {
+    $("#check").attr("onclick", "").addClass("disable");
+    if (currentData[0].length === data[0].length && currentData[0].every((val, index) => val === data[0][index])) {
+        if (data.length === 1) {
+            done = true;
+            view.end();
+            $("#check").css("display", "none");
+        }
+        else {
             view.toggleFlash("green");
             await removeEvents();
 
@@ -140,18 +165,18 @@ const check = async () => {
                 view.editPuzzle(j, currentData[0][j]);
             }
         }
-        else {
-            view.toggleFlash("red");
-            view.shake();
-        }
-
-        setTimeout(() => {
-            addEvents();
-            $("#check").attr("onclick", "check()").removeClass("disable");
-            moving = false;
-        }, 2000);
-        setTimeout(() => $("#check").removeClass("disable"), 1000);
     }
+    else {
+        view.toggleFlash("red");
+        view.shake();
+    }
+
+    setTimeout(() => {
+        addEvents();
+        $("#check").attr("onclick", "check()").removeClass("disable");
+        moving = false;
+    }, 2000);
+    setTimeout(() => $("#check").removeClass("disable"), 1000);
 }
 
 const removeEvents = async () => {
