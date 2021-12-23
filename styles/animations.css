@@ -70,6 +70,10 @@
     left: -700px !important;
 }
 
+.goRight {
+    left: 1000px !important;
+}
+
 .closed {
     transition: 1s;
     top: 675px !important;

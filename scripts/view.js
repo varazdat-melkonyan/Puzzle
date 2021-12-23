@@ -11,10 +11,9 @@ const view = {
         $(`#${i}`).css("left", 200 * i);
     },
     editPuzzle: async (i, text) => {
-        $(".current").addClass("goLeft").css("opacity", 0);
         await timeout(1500)
         view.reset();
-        $(".current").removeClass("goLeft");
+        $(".current").removeClass("goRight goLeft");
         $(".current").addClass("top");
         $(`.current`).append(`<div id="${i}" class="items"><p>${text}</p></div>`);
         $(`.items`).css({

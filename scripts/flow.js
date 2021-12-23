@@ -7,7 +7,6 @@ let allData;
 let moving = false;
 let done = false;
 let currentItem = [];
-let secondItem = [];
 let selectedItem;
 let currentData;
 
@@ -147,6 +146,14 @@ const check = async () => {
     $("#check").attr("onclick", "").addClass("disable");
     if (currentData[0].length === data[0].length && currentData[0].every((val, index) => val === data[0][index])) {
         if (data.length === 1) {
+            if (data.length % 2 === 1) {
+                $(".current").addClass("goRight").css("opacity", 0);
+            }
+            else {
+                $(".current").addClass("goLeft").css("opacity", 0);
+            }
+            view.toggleFlash("green");
+            await timeout(100);
             done = true;
             view.end();
             $("#check").css("display", "none");
@@ -161,6 +168,12 @@ const check = async () => {
             setTimeout(() => $(`.current .items`).remove(), 1200);
 
             positions = [];
+            if (data.length % 2 === 1) {
+                $(".current").addClass("goRight").css("opacity", 0);
+            }
+            else {
+                $(".current").addClass("goLeft").css("opacity", 0);
+            }
             for (let j = 0; j < data[0].length; j++) {
                 view.editPuzzle(j, currentData[0][j]);
             }
