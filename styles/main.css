@@ -44,8 +44,14 @@ body {
 
 	position: fixed;
     top: 0;
-    margin-top: 450px;
+    top: 450px;
 	left: 431px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; 
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; 
 }
 
 .disable {
@@ -138,6 +144,12 @@ body {
     height: 70%;
     width: 100%;
     box-shadow: inset -2px -2px 5px 0 #FFFFFF, inset 2px 3px 3px 1px rgba(222,222,230,0.72);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; 
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; 
 }
 
 .current {
