@@ -144,6 +144,7 @@ const check = async () => {
     moving = true;
     view.flashCircle();
     $("#check").attr("onclick", "").addClass("disable");
+    await timeout(100);
     if (currentData[0].length === data[0].length && currentData[0].every((val, index) => val === data[0][index])) {
         if (data.length === 1) {
             if (data.length % 2 === 1) {
